@@ -8,7 +8,7 @@ g = 9.81  # acceleration due to gravity (m/s^2)
 rho = 1.225  # air density (kg/m³) at sea level
 cd_fuselage = 0.5
 cd_nose_cone = 0.3
-cd_fin = 1.2
+cd_fin = 0.3
 area_fuselage = 0.1  # cross-sectional area of fuselage (m²)
 fin_area = 0.02  # area of one fin (m²)
 num_fins = 4  # number of fins on the rocket
@@ -41,14 +41,14 @@ class Velocity:
         self.vy += ay * time_step
 
     def apply_drag(self, speed, vx, vy, time_step, rocket):
-        cd_effective = 0.5 + 0.5 * np.tanh(speed / 50)
+        cd_effective = 0.2 + 0.1 * np.tanh(speed / 50)
         max_cd_effective = 1.5
         cd_effective = np.min([cd_effective, max_cd_effective])
 
         total_drag = cd_effective * rho * (area_fuselage + fin_area * num_fins) * speed**2 / 2
 
-        drag_x = total_drag * vx / speed
-        drag_y = total_drag * vy / speed
+        drag_x = np.arccos(vy/vx) * total_drag * vx / speed
+        drag_y = np.arcsin(vy/vx) * total_drag * vy / speed 
 
         self.vx -= drag_x * time_step
         self.vy -= drag_y * time_step
@@ -79,7 +79,7 @@ class Rocket:
         self.parachute_area = area_fuselage * 4  # Reasonable parachute area
 
     def get_acceleration(self, thrust_active, t):
-        thrust_factor = np.exp(-0.05 * t) if t <= self.burn_time else 0
+        thrust_factor = np.exp(-0.01 * t) if t <= self.burn_time else 0.2
         thrust = self.thrust * thrust_factor
 
         if thrust_active:
@@ -131,7 +131,7 @@ class Simulation:
                     break  # Stop simulation after max parachute descent time
 
                 # Increase time step during parachute phase to speed up simulation
-                parachute_time_step = 0.02  # 0.05 seconds instead of 0.01 for faster descent
+                parachute_time_step = 0.02  # 0.02 seconds instead of 0.01 for faster descent
                 self.velocity.update(ax, ay, parachute_time_step)
                 self.position.update(self.velocity.vx, self.velocity.vy, parachute_time_step)
 
@@ -174,7 +174,7 @@ def main():
     total_impulse = rocket_specs[rocket_id]
 
     # User-defined inputs
-    angle, mass, burn_time, time_step, total_time = 87.0, 5.0, 10.0, 0.005, 1000.0  # Adjusted time_step
+    angle, mass, burn_time, time_step, total_time = 87.0, 10.0, 20, 0.005, 1000.0  # Adjusted time_step
 
     rocket = Rocket(rocket_id, angle, mass, burn_time, total_time, time_step, total_impulse)
     velocity = Velocity()
