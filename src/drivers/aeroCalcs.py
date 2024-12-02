@@ -98,12 +98,13 @@ class AeroCalcs:
         fin_area = (root_chord + tip_chord) / 2 * semi_span
 
         # CP components
-        cp_nose = nose_length * 0.5
+        cp_nose = body_length + (nose_length * 0.5)
         cp_body = body_length * 0.5
-        cp_fins = (body_length + root_chord - tip_chord / 2) * fin_area
+        cp_fins = ((root_chord - tip_chord) / 2) * fin_area
 
         # Total CP
         cp_total = (cp_nose + cp_body + cp_fins) / (1 + fin_area)
+        
 
         return cp_total
 
