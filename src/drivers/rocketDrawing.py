@@ -44,15 +44,21 @@ class RocketDrawing:
                 nose_y = (diameter / 2) * np.sin(theta)
                 ax.plot(nose_x, nose_y, color='purple')
             elif shape == "tangent_ogive":
-                # Tangent ogive nose cone
-                radius = (length**2 + (diameter / 2)**2) / (2 * (diameter / 2))
-                center_x = airframe_length + length - radius
-                theta = np.linspace(np.arcsin(-diameter / (2 * radius)), np.arcsin(diameter / (2 * radius)), 100)
-                nose_x = center_x + radius * np.cos(theta)
-                nose_y = radius * np.sin(theta)
-                # Draw the top and bottom arcs, ensuring connection to the airframe
-                ax.plot(nose_x, nose_y, color='orange')
-                ax.plot(nose_x, -nose_y, color='orange')
+                # Parabolic nose cone
+                a = (diameter / 2) / (length**2)  # Corrected coefficient
+                nose_x = np.linspace(airframe_length, airframe_length + length, 100)
+                nose_y = a * (nose_x - airframe_length)**2 - (diameter / 2)
+                ax.plot(nose_x, nose_y, color='red')  # Top curve
+                ax.plot(nose_x, -nose_y, color='red')  # Bottom curve
+                # # Tangent ogive nose cone
+                # radius = (length**2 + (diameter / 2)**2) / (2 * (diameter / 2))
+                # center_x = airframe_length + length - radius
+                # theta = np.linspace(np.arcsin(-diameter / (2 * radius)), np.arcsin(diameter / (2 * radius)), 100)
+                # nose_x = center_x + radius * np.cos(theta)
+                # nose_y = radius * np.sin(theta)
+                # # Draw the top and bottom arcs, ensuring connection to the airframe
+                # ax.plot(nose_x, nose_y, color='orange')
+                # ax.plot(nose_x, -nose_y, color='orange')
             elif shape == "parabolic":
                 # Parabolic nose cone
                 a = (diameter / 2) / (length**2)  # Corrected coefficient

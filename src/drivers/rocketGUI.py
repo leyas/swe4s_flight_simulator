@@ -4,15 +4,19 @@ from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar
 )
 import matplotlib.pyplot as plt
+import numpy as np
 import json
 from rocketDrawing import RocketDrawing  # Custom drawing class
 from aeroCalcs import AeroCalcs  # Aero calculations
-
+from physCalcs import PhysCalcs
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1200, 800)  # Adjusted for graph space
+        x_pix = 3600
+        y_pix = 1500
+
+        MainWindow.resize(x_pix, y_pix)  # Adjusted for graph space
 
         # Main Page
         self.mainPage = QtWidgets.QWidget(MainWindow)
@@ -20,7 +24,7 @@ class Ui_MainWindow(object):
 
         # Tab Widget
         self.tabWidget = QtWidgets.QTabWidget(self.mainPage)
-        self.tabWidget.setGeometry(QtCore.QRect(10, 10, 1180, 780))
+        self.tabWidget.setGeometry(QtCore.QRect(10, 10, x_pix-200, y_pix -100))
         self.tabWidget.setObjectName("tabWidget")
 
         # Simulation Tab
@@ -30,11 +34,11 @@ class Ui_MainWindow(object):
         # Layout for Simulation Tab
         self.sim_layout = QtWidgets.QGridLayout(self.Simulation)
 
-        # Left Panel: Input Widgets
-        self.input_group = QtWidgets.QGroupBox("Rocket Inputs")
-        self.input_layout = QtWidgets.QGridLayout(self.input_group)
+        ## Left Panel: air frame group
+        self.airframe_group = QtWidgets.QGroupBox("Airframe Customization")
+        self.airframe_layout = QtWidgets.QGridLayout(self.airframe_group)
 
-        # Input Widgets
+        # Airframe edits
         self.af_d_label = QtWidgets.QLabel("Airframe Diameter (in):")
         self.af_d_input = QtWidgets.QDoubleSpinBox()
         self.af_d_input.setDecimals(1)
@@ -45,6 +49,18 @@ class Ui_MainWindow(object):
         self.af_l_input.setDecimals(1)
         self.af_l_input.setMaximum(500.0)
 
+        self.airframe_layout.addWidget(self.af_d_label, 0, 0)
+        self.airframe_layout.addWidget(self.af_d_input, 0, 1)
+        self.airframe_layout.addWidget(self.af_l_label, 1, 0)
+        self.airframe_layout.addWidget(self.af_l_input, 1, 1)
+
+        self.sim_layout.addWidget(self.airframe_group, 0, 0)
+
+        # nose cone edits
+        ## Left Panel: nose cone group
+        self.nose_group = QtWidgets.QGroupBox("Nose Cone Customization")
+        self.nose_layout = QtWidgets.QGridLayout(self.nose_group)
+
         self.nc_l_label = QtWidgets.QLabel("Nose Cone Length (in):")
         self.nc_l_input = QtWidgets.QDoubleSpinBox()
         self.nc_l_input.setDecimals(1)
@@ -54,19 +70,15 @@ class Ui_MainWindow(object):
         self.nc_list = QtWidgets.QListWidget()
         for item in ["Tangent Ogive", "Elliptic", "Conic"]:
             self.nc_list.addItem(item)
+        
+        self.nose_layout.addWidget(self.nc_l_label, 0, 0)
+        self.nose_layout.addWidget(self.nc_l_input, 1, 1)
+        self.nose_layout.addWidget(self.nc_shape_label, 2, 0)
+        self.nose_layout.addWidget(self.nc_list, 2, 1)
 
-        self.input_layout.addWidget(self.af_d_label, 0, 0)
-        self.input_layout.addWidget(self.af_d_input, 0, 1)
-        self.input_layout.addWidget(self.af_l_label, 1, 0)
-        self.input_layout.addWidget(self.af_l_input, 1, 1)
-        self.input_layout.addWidget(self.nc_l_label, 2, 0)
-        self.input_layout.addWidget(self.nc_l_input, 2, 1)
-        self.input_layout.addWidget(self.nc_shape_label, 3, 0)
-        self.input_layout.addWidget(self.nc_list, 3, 1)
+        self.sim_layout.addWidget(self.nose_group, 1, 0)
 
-        self.sim_layout.addWidget(self.input_group, 0, 0)
-
-         # Fins Group Box
+        # Fins Group Box
         self.fins_group = QtWidgets.QGroupBox("Fins Customization")
         self.fins_layout = QtWidgets.QGridLayout(self.fins_group)
 
@@ -109,29 +121,116 @@ class Ui_MainWindow(object):
         self.fins_layout.addWidget(self.root_chord_input, 3, 1)
 
         # Add Fins Group Box to Layout
-        self.sim_layout.addWidget(self.fins_group, 1, 0)
+        self.sim_layout.addWidget(self.fins_group, 2, 0)
 
-        # Right Panel: Graph and Button
-        self.graph_group = QtWidgets.QGroupBox("Rocket Design")
-        self.graph_layout = QtWidgets.QVBoxLayout(self.graph_group)
+        # Body Material
+        self.material_group = QtWidgets.QGroupBox("Material Customization")
+        self.material_layout = QtWidgets.QGridLayout(self.material_group)
+
+        self.material_label = QtWidgets.QLabel("Materials:")
+        self.material_list = QtWidgets.QListWidget()
+        for item in ["Fiberglass", "Blue Tube"]:
+            self.material_list.addItem(item)
+
+        self.material_layout.addWidget(self.material_label, 2, 0)
+        self.material_layout.addWidget(self.material_list, 2, 1)
+
+        self.sim_layout.addWidget(self.material_group, 3, 0)
+
+        # Parachute size
+        self.parachute_group = QtWidgets.QGroupBox("Parachute Customization")
+        self.parachute_layout = QtWidgets.QGridLayout(self.parachute_group)
+
+        self.parachute_label = QtWidgets.QLabel("Materials:")
+        self.parachute_list = QtWidgets.QListWidget()
+        for item in ["Small (15 inch)", "Medium (28 inch)", "Larger (42 inch)"]:
+            self.parachute_list.addItem(item)
+
+        self.parachute_layout.addWidget(self.parachute_label, 4, 0)
+        self.parachute_layout.addWidget(self.parachute_list, 4, 1)
+
+        self.sim_layout.addWidget(self.parachute_group, 4, 0)
+
+
+
+        ## Right Panel: Graph and Button for Rocket Design
+        self.graph_group1 = QtWidgets.QGroupBox("Rocket Design")
+        self.graph_layout1 = QtWidgets.QVBoxLayout(self.graph_group1)
 
         # Matplotlib Figure
-        self.figure = plt.figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self.Simulation)
+        self.design_figure = plt.figure()
+        self.design_canvas = FigureCanvas(self.design_figure)
+        self.design_toolbar = NavigationToolbar(self.design_canvas, self.Simulation)
+        self.design_toolbar.setFixedHeight(25)
 
         # Display Rocket Button
         self.display_button = QtWidgets.QPushButton("Display Rocket Design")
         self.display_button.clicked.connect(self.display_rocket_design)
+        
+        self.graph_layout1.addWidget(self.design_toolbar)
+        self.graph_layout1.addWidget(self.design_canvas)
+        self.graph_layout1.addWidget(self.display_button)
 
-        self.graph_layout.addWidget(self.toolbar)
-        self.graph_layout.addWidget(self.canvas)
-        self.graph_layout.addWidget(self.display_button)
+        self.sim_layout.addWidget(self.graph_group1, 0, 1, 2, 1)
 
-        self.sim_layout.addWidget(self.graph_group, 0, 1)
+        # Right Panel: Graph and Button for Plot
+        self.graph_group2 = QtWidgets.QGroupBox("Rocket Flight Path")
+        self.graph_layout2 = QtWidgets.QVBoxLayout(self.graph_group2)
+
+        # Matplotlib Figure
+        self.flight_figure = plt.figure()
+        self.flight_canvas = FigureCanvas(self.flight_figure)
+        self.flight_toolbar = NavigationToolbar(self.flight_canvas, self.Simulation)
+        self.flight_toolbar.setFixedHeight(25)
+
+        # Plot Y Position Button
+        self.plot_button = QtWidgets.QPushButton("Plot Y Position")
+        self.plot_button.clicked.connect(self.plot_y_position)
+
+        self.graph_layout2.addWidget(self.flight_toolbar)
+        self.graph_layout2.addWidget(self.flight_canvas)
+        self.graph_layout2.addWidget(self.plot_button)
+
+        self.sim_layout.addWidget(self.graph_group2, 2, 1, 2, 1)
+
 
         # Add Simulation Tab to Tab Widget
         self.tabWidget.addTab(self.Simulation, "Simulation Tab")
+
+        ##### Information Tab #####
+        self.Information = QtWidgets.QWidget()
+        self.Information.setObjectName("Information")
+
+        # Layout for Information Tab
+        self.info_layout = QtWidgets.QGridLayout(self.Information)
+
+        # All about fins
+        self.fins_info_group = QtWidgets.QGroupBox("Fin Info")
+        self.fins_info_layout = QtWidgets.QGridLayout(self.fins_info_group)
+        self.info_layout.addWidget(self.fins_info_group, 0, 0)
+
+        # All about Nose Cones
+        self.nose_info_group = QtWidgets.QGroupBox("Nose Cone Info")
+        self.nose_info_layout = QtWidgets.QGridLayout(self.nose_info_group)
+        self.info_layout.addWidget(self.nose_info_group, 1, 0)
+
+        # All about motors
+        self.motor_info_group = QtWidgets.QGroupBox("Motor Info")
+        self.motor_info_layout = QtWidgets.QGridLayout(self.motor_info_group)
+        self.info_layout.addWidget(self.motor_info_group, 2, 0)
+
+        # All about static margin
+        self.sm_info_group = QtWidgets.QGroupBox("Static Margin Info")
+        self.sm_info_layout = QtWidgets.QGridLayout(self.sm_info_group)
+        self.info_layout.addWidget(self.sm_info_group, 3, 0)
+
+        # All about recovery
+        self.rec_info_group = QtWidgets.QGroupBox("Recovery Info")
+        self.rec_info_layout = QtWidgets.QGridLayout(self.rec_info_group)
+        self.info_layout.addWidget(self.rec_info_group, 4, 0)
+
+        # Add information Tab to Tab Widget
+        self.tabWidget.addTab(self.Information, "Information Tab")
 
         # Set Central Widget
         MainWindow.setCentralWidget(self.mainPage)
@@ -202,8 +301,8 @@ class Ui_MainWindow(object):
         """
         Display the rocket design in the embedded Matplotlib graph.
         """
-        self.figure.clear()
-        ax = self.figure.add_subplot(111)
+        self.design_figure.clear()
+        ax = self.design_figure.add_subplot(111)
 
         # Load the rocket specs JSON
         rocket_specs_file = "../config/rocket_specs.json"
@@ -220,10 +319,46 @@ class Ui_MainWindow(object):
         rocket_drawing.plot_rocket(ax)  # Pass the axis for plotting
 
         # Update the canvas in the GUI
-        self.canvas.draw()
+        self.design_canvas.draw()
 
+    def plot_y_position(self):
+        """Plot Y position with gradient in the embedded Matplotlib graph."""
+        self.flight_figure.clear()
+        ax = self.flight_figure.add_subplot(111)
 
+        # Create an instance of PhysCalcs and simulate
+        phys_calcs = PhysCalcs("../config/rocket_specs.json", material="fiberglass", motor="K")
+        try:
+            time, x, y, vx, vy = phys_calcs.simulate()
+            velocity = np.sqrt(vx**2 + vy**2)
 
+            # Normalize velocities for color gradient
+            norm = plt.Normalize(velocity.min(), velocity.max())
+            points = np.array([time, y]).T.reshape(-1, 1, 2)
+            segments = np.concatenate([points[:-1], points[1:]], axis=1)
+
+            # Create LineCollection for gradient
+            from matplotlib.collections import LineCollection
+            lc = LineCollection(segments, cmap="viridis", norm=norm)
+            lc.set_array(velocity)
+            lc.set_linewidth(2)
+            ax.add_collection(lc)
+
+            # Add colorbar and set labels
+            ax.set_title("Rocket Y-Position Over Time with Velocity Gradient")
+            ax.set_xlabel("Time (s)")
+            ax.set_ylabel("Y Position (m)")
+            ax.grid()
+            cbar = self.flight_figure.colorbar(lc, ax=ax)
+            cbar.set_label("Velocity (m/s)")
+
+            ax.set_xlim(time.min(), time.max())
+            ax.set_ylim(y.min() - 10, y.max() + 10)
+
+            # Update the canvas in the GUI
+            self.flight_canvas.draw()
+        except Exception as e:
+            print(f"Error in plot_y_position: {e}")
 
 if __name__ == "__main__":
     import sys
