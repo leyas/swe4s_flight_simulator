@@ -4,7 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         """
-        General set up function for the GUI.
+        General set up function for the GUI
         """
         # first set up window
         MainWindow.setObjectName("MainWindow")
