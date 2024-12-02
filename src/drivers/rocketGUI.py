@@ -14,7 +14,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         x_pix = 3600
-        y_pix = 1500
+        y_pix = 1800
 
         MainWindow.resize(x_pix, y_pix)  # Adjusted for graph space
 
@@ -137,6 +137,21 @@ class Ui_MainWindow(object):
 
         self.sim_layout.addWidget(self.material_group, 3, 0)
 
+
+        # Motors
+        self.motor_group = QtWidgets.QGroupBox("Motor Selection")
+        self.motor_layout = QtWidgets.QGridLayout(self.motor_group)
+
+        self.motor_label = QtWidgets.QLabel("Available motors:")
+        self.motor_list = QtWidgets.QListWidget()
+        for item in ["G", "H", "I", "J", "K", "L"]:
+            self.motor_list.addItem(item)
+
+        self.motor_layout.addWidget(self.motor_label, 2, 0)
+        self.motor_layout.addWidget(self.motor_list, 2, 1)
+
+        self.sim_layout.addWidget(self.motor_group, 4, 1)
+
         # Parachute size
         self.parachute_group = QtWidgets.QGroupBox("Parachute Customization")
         self.parachute_layout = QtWidgets.QGridLayout(self.parachute_group)
@@ -184,7 +199,7 @@ class Ui_MainWindow(object):
         self.flight_toolbar.setFixedHeight(25)
 
         # Plot Y Position Button
-        self.plot_button = QtWidgets.QPushButton("Plot Y Position")
+        self.plot_button = QtWidgets.QPushButton("Plot Z Position")
         self.plot_button.clicked.connect(self.plot_y_position)
 
         self.graph_layout2.addWidget(self.flight_toolbar)
@@ -326,10 +341,88 @@ class Ui_MainWindow(object):
         self.flight_figure.clear()
         ax = self.flight_figure.add_subplot(111)
 
+        # # Create an instance of PhysCalcs and simulate
+        # phys_calcs = PhysCalcs("../config/rocket_specs.json", material="fiberglass", motor="K")
+        # try:
+        #     time, x, y, vx, vy = phys_calcs.simulate()
+        #     velocity = np.sqrt(vx**2 + vy**2)
+
+        #     # Normalize velocities for color gradient
+        #     norm = plt.Normalize(velocity.min(), velocity.max())
+        #     points = np.array([time, y]).T.reshape(-1, 1, 2)
+        #     segments = np.concatenate([points[:-1], points[1:]], axis=1)
+
+        #     # Create LineCollection for gradient
+        #     from matplotlib.collections import LineCollection
+        #     lc = LineCollection(segments, cmap="viridis", norm=norm)
+        #     lc.set_array(velocity)
+        #     lc.set_linewidth(2)
+        #     ax.add_collection(lc)
+
+        #     # Add colorbar and set labels
+        #     ax.set_title("Rocket Y-Position Over Time with Velocity Gradient")
+        #     ax.set_xlabel("Time (s)")
+        #     ax.set_ylabel("Y Position (m)")
+        #     ax.grid()
+        #     cbar = self.flight_figure.colorbar(lc, ax=ax)
+        #     cbar.set_label("Velocity (m/s)")
+
+        #     ax.set_xlim(time.min(), time.max())
+        #     ax.set_ylim(y.min() - 10, y.max() + 10)
+
+        #     # Update the canvas in the GUI
+        #     self.flight_canvas.draw()
+
+        # except Exception as e:
+        #     print(f"Error in plot_y_position: {e}")
+
+        # Create an instance of PhysCalcs and simulate
+        # phys_calcs = PhysCalcs("../config/rocket_specs.json", material="fiberglass", motor="K")
+        # try:
+        #     time, x, y, vx, vy = phys_calcs.simulate()
+        #     norm = plt.Normalize(velocity.min(), velocity.max())
+
+        #     if y.any() > 0:
+        #         velocity = (np.sqrt(vx**2 + vy**2)) * 3.2804
+        #         norm = velocity
+        #     else:
+        #         velocity = 0
+
+        #     # Normalize velocities for color gradient
+            
+        #     points = np.array([time, y]).T.reshape(-1, 1, 2)
+        #     segments = np.concatenate([points[:-1], points[1:]], axis=1)
+
+        #     # Create LineCollection for gradient
+        #     from matplotlib.collections import LineCollection
+        #     lc = LineCollection(segments, cmap="viridis", norm=norm)
+        #     lc.set_array(velocity)
+        #     lc.set_linewidth(2)
+        #     ax.add_collection(lc)
+
+        #     # Add colorbar and set labels
+        #     ax.set_title("Rocket Y-Position Over Time with Velocity Gradient")
+        #     ax.set_xlabel("Time (s)")
+        #     ax.set_ylabel("Y Position (in.)")
+        #     ax.grid()
+        #     cbar = self.flight_figure.colorbar(lc, ax=ax)
+        #     cbar.set_label("Velocity (ft/s)")
+
+        #     ax.set_xlim(time.min(), time.max())
+        #     ax.set_ylim(y.min() - 10, y.max() + 10)
+
+        #     # Update the canvas in the GUI
+        #     self.flight_canvas.draw()
+        # except Exception as e:
+        #     print(f"Error in plot_y_position: {e}")
+            
         # Create an instance of PhysCalcs and simulate
         phys_calcs = PhysCalcs("../config/rocket_specs.json", material="fiberglass", motor="K")
         try:
+            # Simulate and get data
             time, x, y, vx, vy = phys_calcs.simulate()
+
+            # Compute velocity magnitude
             velocity = np.sqrt(vx**2 + vy**2)
 
             # Normalize velocities for color gradient
@@ -347,11 +440,12 @@ class Ui_MainWindow(object):
             # Add colorbar and set labels
             ax.set_title("Rocket Y-Position Over Time with Velocity Gradient")
             ax.set_xlabel("Time (s)")
-            ax.set_ylabel("Y Position (m)")
+            ax.set_ylabel("Z Position (ft)")
             ax.grid()
             cbar = self.flight_figure.colorbar(lc, ax=ax)
-            cbar.set_label("Velocity (m/s)")
+            cbar.set_label("Velocity (ft/s)")
 
+            # Set plot limits
             ax.set_xlim(time.min(), time.max())
             ax.set_ylim(y.min() - 10, y.max() + 10)
 
@@ -359,6 +453,7 @@ class Ui_MainWindow(object):
             self.flight_canvas.draw()
         except Exception as e:
             print(f"Error in plot_y_position: {e}")
+
 
 if __name__ == "__main__":
     import sys
