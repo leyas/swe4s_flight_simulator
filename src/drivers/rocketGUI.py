@@ -31,11 +31,11 @@ class Ui_MainWindow(object):
         # Layout for Simulation Tab
         self.sim_layout = QtWidgets.QGridLayout(self.Simulation)
 
-        # Left Panel: Input Widgets
-        self.input_group = QtWidgets.QGroupBox("Rocket Inputs")
-        self.input_layout = QtWidgets.QGridLayout(self.input_group)
+        ## Left Panel: air frame group
+        self.airframe_group = QtWidgets.QGroupBox("Airframe Customization")
+        self.airframe_layout = QtWidgets.QGridLayout(self.airframe_group)
 
-        # Input Widgets
+        # Airframe edits
         self.af_d_label = QtWidgets.QLabel("Airframe Diameter (in):")
         self.af_d_input = QtWidgets.QDoubleSpinBox()
         self.af_d_input.setDecimals(1)
@@ -46,6 +46,18 @@ class Ui_MainWindow(object):
         self.af_l_input.setDecimals(1)
         self.af_l_input.setMaximum(500.0)
 
+        self.airframe_layout.addWidget(self.af_d_label, 0, 0)
+        self.airframe_layout.addWidget(self.af_d_input, 0, 1)
+        self.airframe_layout.addWidget(self.af_l_label, 1, 0)
+        self.airframe_layout.addWidget(self.af_l_input, 1, 1)
+
+        self.sim_layout.addWidget(self.airframe_group, 0, 0)
+
+        # nose cone edits
+        ## Left Panel: nose cone group
+        self.nose_group = QtWidgets.QGroupBox("Nose Cone Customization")
+        self.nose_layout = QtWidgets.QGridLayout(self.nose_group)
+
         self.nc_l_label = QtWidgets.QLabel("Nose Cone Length (in):")
         self.nc_l_input = QtWidgets.QDoubleSpinBox()
         self.nc_l_input.setDecimals(1)
@@ -55,19 +67,15 @@ class Ui_MainWindow(object):
         self.nc_list = QtWidgets.QListWidget()
         for item in ["Tangent Ogive", "Elliptic", "Conic"]:
             self.nc_list.addItem(item)
+        
+        self.nose_layout.addWidget(self.nc_l_label, 0, 0)
+        self.nose_layout.addWidget(self.nc_l_input, 1, 1)
+        self.nose_layout.addWidget(self.nc_shape_label, 2, 0)
+        self.nose_layout.addWidget(self.nc_list, 2, 1)
 
-        self.input_layout.addWidget(self.af_d_label, 0, 0)
-        self.input_layout.addWidget(self.af_d_input, 0, 1)
-        self.input_layout.addWidget(self.af_l_label, 1, 0)
-        self.input_layout.addWidget(self.af_l_input, 1, 1)
-        self.input_layout.addWidget(self.nc_l_label, 2, 0)
-        self.input_layout.addWidget(self.nc_l_input, 2, 1)
-        self.input_layout.addWidget(self.nc_shape_label, 3, 0)
-        self.input_layout.addWidget(self.nc_list, 3, 1)
+        self.sim_layout.addWidget(self.nose_group, 1, 0)
 
-        self.sim_layout.addWidget(self.input_group, 0, 0)
-
-         # Fins Group Box
+        # Fins Group Box
         self.fins_group = QtWidgets.QGroupBox("Fins Customization")
         self.fins_layout = QtWidgets.QGridLayout(self.fins_group)
 
@@ -110,9 +118,23 @@ class Ui_MainWindow(object):
         self.fins_layout.addWidget(self.root_chord_input, 3, 1)
 
         # Add Fins Group Box to Layout
-        self.sim_layout.addWidget(self.fins_group, 1, 0)
+        self.sim_layout.addWidget(self.fins_group, 2, 0)
 
-        # Right Panel: Graph and Button for Rocket Design
+        # Body Material
+        self.material_group = QtWidgets.QGroupBox("Material Customization")
+        self.material_layout = QtWidgets.QGridLayout(self.material_group)
+
+        self.material_label = QtWidgets.QLabel("Materials:")
+        self.material_list = QtWidgets.QListWidget()
+        for item in ["Fiberglass", "Blue Tube"]:
+            self.material_list.addItem(item)
+
+        self.material_layout.addWidget(self.material_label, 2, 0)
+        self.material_layout.addWidget(self.material_list, 2, 1)
+
+        self.sim_layout.addWidget(self.material_group, 3, 0)
+
+        ## Right Panel: Graph and Button for Rocket Design
         self.graph_group1 = QtWidgets.QGroupBox("Rocket Design")
         self.graph_layout1 = QtWidgets.QVBoxLayout(self.graph_group1)
 
@@ -130,7 +152,7 @@ class Ui_MainWindow(object):
         self.graph_layout1.addWidget(self.design_canvas)
         self.graph_layout1.addWidget(self.display_button)
 
-        self.sim_layout.addWidget(self.graph_group1, 0, 1)
+        self.sim_layout.addWidget(self.graph_group1, 0, 1, 2, 1)
 
         # Right Panel: Graph and Button for Plot
         self.graph_group2 = QtWidgets.QGroupBox("Rocket Flight Path")
@@ -150,7 +172,7 @@ class Ui_MainWindow(object):
         self.graph_layout2.addWidget(self.flight_canvas)
         self.graph_layout2.addWidget(self.plot_button)
 
-        self.sim_layout.addWidget(self.graph_group2, 1, 1)
+        self.sim_layout.addWidget(self.graph_group2, 2, 1, 2, 1)
 
 
         # Add Simulation Tab to Tab Widget
