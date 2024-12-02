@@ -4,15 +4,16 @@ from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar
 )
 import matplotlib.pyplot as plt
+import numpy as np
 import json
 from rocketDrawing import RocketDrawing  # Custom drawing class
 from aeroCalcs import AeroCalcs  # Aero calculations
-
+from physCalcs import PhysCalcs
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1200, 800)  # Adjusted for graph space
+        MainWindow.resize(1200, 900)  # Adjusted for graph space
 
         # Main Page
         self.mainPage = QtWidgets.QWidget(MainWindow)
@@ -20,7 +21,7 @@ class Ui_MainWindow(object):
 
         # Tab Widget
         self.tabWidget = QtWidgets.QTabWidget(self.mainPage)
-        self.tabWidget.setGeometry(QtCore.QRect(10, 10, 1180, 780))
+        self.tabWidget.setGeometry(QtCore.QRect(10, 10, 1180, 880))
         self.tabWidget.setObjectName("tabWidget")
 
         # Simulation Tab
@@ -111,24 +112,46 @@ class Ui_MainWindow(object):
         # Add Fins Group Box to Layout
         self.sim_layout.addWidget(self.fins_group, 1, 0)
 
-        # Right Panel: Graph and Button
-        self.graph_group = QtWidgets.QGroupBox("Rocket Design")
-        self.graph_layout = QtWidgets.QVBoxLayout(self.graph_group)
+        # Right Panel: Graph and Button for Rocket Design
+        self.graph_group1 = QtWidgets.QGroupBox("Rocket Design")
+        self.graph_layout1 = QtWidgets.QVBoxLayout(self.graph_group1)
 
         # Matplotlib Figure
-        self.figure = plt.figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self.Simulation)
+        self.design_figure = plt.figure()
+        self.design_canvas = FigureCanvas(self.design_figure)
+        self.design_toolbar = NavigationToolbar(self.design_canvas, self.Simulation)
+        self.design_toolbar.setFixedHeight(25)
 
         # Display Rocket Button
         self.display_button = QtWidgets.QPushButton("Display Rocket Design")
         self.display_button.clicked.connect(self.display_rocket_design)
+        
+        self.graph_layout1.addWidget(self.design_toolbar)
+        self.graph_layout1.addWidget(self.design_canvas)
+        self.graph_layout1.addWidget(self.display_button)
 
-        self.graph_layout.addWidget(self.toolbar)
-        self.graph_layout.addWidget(self.canvas)
-        self.graph_layout.addWidget(self.display_button)
+        self.sim_layout.addWidget(self.graph_group1, 0, 1)
 
-        self.sim_layout.addWidget(self.graph_group, 0, 1)
+        # Right Panel: Graph and Button for Plot
+        self.graph_group2 = QtWidgets.QGroupBox("Rocket Flight Path")
+        self.graph_layout2 = QtWidgets.QVBoxLayout(self.graph_group2)
+
+        # Matplotlib Figure
+        self.flight_figure = plt.figure()
+        self.flight_canvas = FigureCanvas(self.flight_figure)
+        self.flight_toolbar = NavigationToolbar(self.flight_canvas, self.Simulation)
+        self.flight_toolbar.setFixedHeight(25)
+
+        # Plot Y Position Button
+        self.plot_button = QtWidgets.QPushButton("Plot Y Position")
+        self.plot_button.clicked.connect(self.plot_y_position)
+
+        self.graph_layout2.addWidget(self.flight_toolbar)
+        self.graph_layout2.addWidget(self.flight_canvas)
+        self.graph_layout2.addWidget(self.plot_button)
+
+        self.sim_layout.addWidget(self.graph_group2, 1, 1)
+
 
         # Add Simulation Tab to Tab Widget
         self.tabWidget.addTab(self.Simulation, "Simulation Tab")
@@ -202,8 +225,8 @@ class Ui_MainWindow(object):
         """
         Display the rocket design in the embedded Matplotlib graph.
         """
-        self.figure.clear()
-        ax = self.figure.add_subplot(111)
+        self.design_figure.clear()
+        ax = self.design_figure.add_subplot(111)
 
         # Load the rocket specs JSON
         rocket_specs_file = "../config/rocket_specs.json"
@@ -220,10 +243,46 @@ class Ui_MainWindow(object):
         rocket_drawing.plot_rocket(ax)  # Pass the axis for plotting
 
         # Update the canvas in the GUI
-        self.canvas.draw()
+        self.design_canvas.draw()
 
+    def plot_y_position(self):
+        """Plot Y position with gradient in the embedded Matplotlib graph."""
+        self.flight_figure.clear()
+        ax = self.flight_figure.add_subplot(111)
 
+        # Create an instance of PhysCalcs and simulate
+        phys_calcs = PhysCalcs("../config/rocket_specs.json", material="fiberglass", motor="K")
+        try:
+            time, x, y, vx, vy = phys_calcs.simulate()
+            velocity = np.sqrt(vx**2 + vy**2)
 
+            # Normalize velocities for color gradient
+            norm = plt.Normalize(velocity.min(), velocity.max())
+            points = np.array([time, y]).T.reshape(-1, 1, 2)
+            segments = np.concatenate([points[:-1], points[1:]], axis=1)
+
+            # Create LineCollection for gradient
+            from matplotlib.collections import LineCollection
+            lc = LineCollection(segments, cmap="viridis", norm=norm)
+            lc.set_array(velocity)
+            lc.set_linewidth(2)
+            ax.add_collection(lc)
+
+            # Add colorbar and set labels
+            ax.set_title("Rocket Y-Position Over Time with Velocity Gradient")
+            ax.set_xlabel("Time (s)")
+            ax.set_ylabel("Y Position (m)")
+            ax.grid()
+            cbar = self.flight_figure.colorbar(lc, ax=ax)
+            cbar.set_label("Velocity (m/s)")
+
+            ax.set_xlim(time.min(), time.max())
+            ax.set_ylim(y.min() - 10, y.max() + 10)
+
+            # Update the canvas in the GUI
+            self.flight_canvas.draw()
+        except Exception as e:
+            print(f"Error in plot_y_position: {e}")
 
 if __name__ == "__main__":
     import sys
