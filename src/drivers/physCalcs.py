@@ -1,8 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+from matplotlib.collections import LineCollection
 import json
 from scipy.integrate import solve_ivp
-from aeroCalcs import AeroCalcs  # Import AeroCalcs
+from aeroCalcs import AeroCalcs
 
 
 class PhysCalcs:
@@ -16,25 +18,33 @@ class PhysCalcs:
 
     def dynamics(self, t, y, burn_time, thrust):
         """Compute the dynamics (velocity and acceleration) of the rocket."""
-        position, velocity, mass = y
+        x, y_pos, vx, vy, mass = y
 
         # Prevent negative altitude
-        if position < 0:
-            return [0, 0, 0]
+        if y_pos < 0:
+            return [0, 0, 0, 0, 0]
+
+        # Calculate velocity magnitude
+        velocity = np.sqrt(vx**2 + vy**2)
 
         # Determine air density and drag coefficient
-        rho = self.aero_calcs.calculate_air_density(position)
-        cd = self.aero_calcs.calculate_drag_coefficient(position)
+        rho = self.aero_calcs.calculate_air_density(y_pos)
+        cd = self.aero_calcs.calculate_drag_coefficient(y_pos)
         frontal_area = np.pi * (self.aero_calcs.airframe["diameter"] * 2.54 / 2) ** 2 / 10000  # cm² to m²
 
-        # Calculate drag force
-        drag = 0.5 * cd * rho * frontal_area * velocity ** 2 * np.sign(velocity)
+        # Calculate drag force components
+        drag = 0.5 * cd * rho * frontal_area * velocity**2
+        drag_x = -drag * (vx / velocity) if velocity > 0 else 0
+        drag_y = -drag * (vy / velocity) - mass * 9.81 if velocity > 0 else -mass * 9.81
 
-        # Thrust during burn, 0 afterward
+        # Thrust during burn
         current_thrust = thrust if t <= burn_time else 0
+        thrust_x = current_thrust * (vx / velocity) if velocity > 0 else 0
+        thrust_y = current_thrust * (vy / velocity) if velocity > 0 else 0
 
-        # Calculate acceleration
-        acceleration = (current_thrust - drag) / mass - 9.81  # Gravity acts downward
+        # Acceleration components
+        ax = (thrust_x + drag_x) / mass
+        ay = (thrust_y + drag_y) / mass
 
         # Mass loss during burn
         if t <= burn_time:
@@ -43,28 +53,14 @@ class PhysCalcs:
         else:
             dm_dt = 0
 
-        return [velocity, acceleration, dm_dt]
-
-    def apogee_event(self, t, y, *args):
-        """Event to stop integration at apogee (velocity = 0)."""
-        return y[1]  # Velocity
-
-    apogee_event.terminal = True  # Stop integration at apogee
-    apogee_event.direction = -1  # Detect when velocity decreases through zero
-
-    def ground_event(self, t, y, *args):
-        """Event to stop integration when rocket hits the ground (position = 0)."""
-        return y[0]  # Position
-
-    ground_event.terminal = True  # Stop integration at ground
-    ground_event.direction = -1  # Detect when position decreases through zero
+        return [vx, vy, ax, ay, dm_dt]
 
     def simulate(self):
         """Simulate the trajectory using numerical integration."""
         burn_time = self.motor["burn_time"]
         thrust = self.motor["thrust"]
         initial_mass = self.aero_calcs.calculate_center_of_gravity() + self.motor["mass"] / 1000  # Includes motor mass
-        initial_state = [0, 0, initial_mass]  # Initial position, velocity, mass
+        initial_state = [0, 0, 0, 100, initial_mass]  # Initial x, y, vx, vy, mass
 
         # Ascent and coasting phase
         ascent_result = solve_ivp(
@@ -73,61 +69,113 @@ class PhysCalcs:
             initial_state,
             args=(burn_time, thrust),
             dense_output=True,
-            events=self.apogee_event,
             max_step=0.1
         )
 
-        # Get apogee state
-        apogee_state = ascent_result.y[:, -1]
-        apogee_time = ascent_result.t[-1]
-        print(f"Apogee reached at {apogee_state[0]:.2f} meters, time: {apogee_time:.2f} seconds")
+        return ascent_result.t, ascent_result.y[0], ascent_result.y[1], ascent_result.y[2], ascent_result.y[3]
 
-        # Descent phase
-        descent_result = solve_ivp(
-            self.dynamics,
-            [apogee_time, apogee_time + 1000],
-            apogee_state,
-            args=(0, 0),  # No thrust during descent
-            dense_output=True,
-            events=self.ground_event,
-            max_step=0.1
-        )
+    def plot_position_with_gradient(self, x, y, vx, vy):
+        """Plot x, y positions with a color gradient based on velocity."""
+        # Ensure inputs are numpy arrays
+        x = np.asarray(x)
+        y = np.asarray(y)
+        vx = np.asarray(vx)
+        vy = np.asarray(vy)
 
-        # Combine results
-        time = np.hstack((ascent_result.t, descent_result.t))
-        position = np.hstack((ascent_result.y[0], descent_result.y[0]))
-        velocity = np.hstack((ascent_result.y[1], descent_result.y[1]))
+        # Validate inputs
+        if len(x) != len(y):
+            raise ValueError("x and y must have the same length.")
+        if len(vx) != len(vy):
+            raise ValueError("vx and vy must have the same length.")
+        if len(x) != len(vx):
+            raise ValueError("x, y, vx, and vy must all have the same length.")
 
-        return time, position, velocity
+        # Calculate velocity magnitude
+        velocity = np.sqrt(vx**2 + vy**2)
 
-    def plot_trajectory(self, time, position, velocity):
-        """Plot position and velocity over time."""
-        # Plot position
-        plt.figure()
-        plt.plot(time, position, label="Position (m)")
-        plt.title("Rocket Position vs. Time")
-        plt.xlabel("Time (s)")
-        plt.ylabel("Position (m)")
-        plt.legend()
-        plt.grid()
+        # Normalize velocities for coloring
+        norm = plt.Normalize(velocity.min(), velocity.max())
 
-        # Plot velocity
-        plt.figure()
-        plt.plot(time, velocity, label="Velocity (m/s)", color="orange")
-        plt.title("Rocket Velocity vs. Time")
-        plt.xlabel("Time (s)")
-        plt.ylabel("Velocity (m/s)")
-        plt.legend()
-        plt.grid()
+        # Prepare the figure and axis
+        fig, ax = plt.subplots(figsize=(8, 8))
+        ax.set_title("Rocket Trajectory with Velocity Gradient")
+        ax.set_xlabel("X Position (m)")
+        ax.set_ylabel("Y Position (m)")
+        ax.grid()
+
+        # Create a LineCollection for the gradient
+        points = np.array([x, y]).T.reshape(-1, 1, 2)
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        lc = LineCollection(segments, cmap="viridis", norm=norm)
+        lc.set_array(velocity)
+        lc.set_linewidth(2)
+        ax.add_collection(lc)
+
+        # Set axis limits
+        ax.set_xlim(x.min() - 10, x.max() + 10)
+        ax.set_ylim(y.min() - 10, y.max() + 10)
+
+        # Add a colorbar
+        cbar = plt.colorbar(lc, ax=ax)
+        cbar.set_label("Velocity (m/s)")
 
         plt.show()
 
+    def plot_y_position_with_gradient(self, time, y, velocity):
+        """Plot y position over time with a color gradient based on velocity."""
+        # Ensure inputs are numpy arrays
+        time = np.asarray(time)
+        y = np.asarray(y)
+        velocity = np.asarray(velocity)
+
+        # Validate inputs
+        if len(time) != len(y):
+            raise ValueError("time and y must have the same length.")
+        if len(velocity) != len(time):
+            raise ValueError("velocity and time must have the same length.")
+
+        # Normalize velocities for coloring
+        norm = plt.Normalize(velocity.min(), velocity.max())
+
+        # Prepare the figure and axis
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.set_title("Rocket Y-Position Over Time with Velocity Gradient")
+        ax.set_xlabel("Time (s)")
+        ax.set_ylabel("Y Position (m)")
+        ax.grid()
+
+        # Create a LineCollection for the gradient
+        points = np.array([time, y]).T.reshape(-1, 1, 2)
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        lc = LineCollection(segments, cmap="viridis", norm=norm)
+        lc.set_array(velocity)
+        lc.set_linewidth(2)
+        ax.add_collection(lc)
+
+        # Set axis limits
+        ax.set_xlim(time.min(), time.max())
+        ax.set_ylim(y.min() - 10, y.max() + 10)
+
+        # Add a colorbar
+        cbar = plt.colorbar(lc, ax=ax)
+        cbar.set_label("Velocity (m/s)")
+
+        plt.show()
+
+
+
 if __name__ == "__main__":
     # Create an instance
-    phys_calcs = PhysCalcs("rocket_specs.json", material="fiberglass", motor="K")
+    phys_calcs = PhysCalcs("../config/rocket_specs.json", material="fiberglass", motor="K")
 
     # Simulate the trajectory
-    time, position, velocity = phys_calcs.simulate()
+    time, x, y, vx, vy = phys_calcs.simulate()
 
-    # Plot results
-    phys_calcs.plot_trajectory(time, position, velocity)
+    # Calculate velocity magnitude
+    velocity = np.sqrt(vx**2 + vy**2)
+
+    # Plot y-position over time with velocity gradient
+    phys_calcs.plot_y_position_with_gradient(time, y, velocity)
+
+    # Plot position with gradient
+    # phys_calcs.plot_position_with_gradient(x, y, vx, vy)

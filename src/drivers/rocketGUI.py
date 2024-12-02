@@ -66,6 +66,51 @@ class Ui_MainWindow(object):
 
         self.sim_layout.addWidget(self.input_group, 0, 0)
 
+         # Fins Group Box
+        self.fins_group = QtWidgets.QGroupBox("Fins Customization")
+        self.fins_layout = QtWidgets.QGridLayout(self.fins_group)
+
+        # Sweep Angle
+        self.sweep_angle_label = QtWidgets.QLabel("Sweep Angle (deg):")
+        self.sweep_angle_input = QtWidgets.QDoubleSpinBox()
+        self.sweep_angle_input.setDecimals(1)
+        self.sweep_angle_input.setMaximum(90.0)
+        self.sweep_angle_input.setSingleStep(1.0)
+
+        # Tip Chord
+        self.tip_chord_label = QtWidgets.QLabel("Tip Chord (in):")
+        self.tip_chord_input = QtWidgets.QDoubleSpinBox()
+        self.tip_chord_input.setDecimals(1)
+        self.tip_chord_input.setMaximum(50.0)
+        self.tip_chord_input.setSingleStep(0.5)
+
+        # Semi-Span
+        self.semi_span_label = QtWidgets.QLabel("Semi-Span (in):")
+        self.semi_span_input = QtWidgets.QDoubleSpinBox()
+        self.semi_span_input.setDecimals(1)
+        self.semi_span_input.setMaximum(50.0)
+        self.semi_span_input.setSingleStep(0.5)
+
+        # Root Chord
+        self.root_chord_label = QtWidgets.QLabel("Root Chord (in):")
+        self.root_chord_input = QtWidgets.QDoubleSpinBox()
+        self.root_chord_input.setDecimals(1)
+        self.root_chord_input.setMaximum(50.0)
+        self.root_chord_input.setSingleStep(0.5)
+
+        # Add Widgets to Fins Layout
+        self.fins_layout.addWidget(self.sweep_angle_label, 0, 0)
+        self.fins_layout.addWidget(self.sweep_angle_input, 0, 1)
+        self.fins_layout.addWidget(self.tip_chord_label, 1, 0)
+        self.fins_layout.addWidget(self.tip_chord_input, 1, 1)
+        self.fins_layout.addWidget(self.semi_span_label, 2, 0)
+        self.fins_layout.addWidget(self.semi_span_input, 2, 1)
+        self.fins_layout.addWidget(self.root_chord_label, 3, 0)
+        self.fins_layout.addWidget(self.root_chord_input, 3, 1)
+
+        # Add Fins Group Box to Layout
+        self.sim_layout.addWidget(self.fins_group, 1, 0)
+
         # Right Panel: Graph and Button
         self.graph_group = QtWidgets.QGroupBox("Rocket Design")
         self.graph_layout = QtWidgets.QVBoxLayout(self.graph_group)
@@ -106,6 +151,12 @@ class Ui_MainWindow(object):
         self.nc_l_input.valueChanged.connect(self.update_nc_length)
         self.nc_list.itemClicked.connect(self.update_nc_shape)
 
+        # Fins connections
+        self.sweep_angle_input.valueChanged.connect(self.update_sweep_angle)
+        self.tip_chord_input.valueChanged.connect(self.update_tip_chord)
+        self.semi_span_input.valueChanged.connect(self.update_semi_span)
+        self.root_chord_input.valueChanged.connect(self.update_root_chord)
+
     def update_json(self, section, key, value):
         """Update the JSON file with the specified key-value pair."""
         json_file = "../config/rocket_specs.json"
@@ -135,27 +186,17 @@ class Ui_MainWindow(object):
         shape = item.text().lower().replace(" ", "_")
         self.update_json("nose_cone", "shape", shape)
 
-    # def display_rocket_design(self):
-    #     """Display the rocket design in the graph."""
-    #     self.figure.clear()
-    #     ax = self.figure.add_subplot(111)
+    def update_sweep_angle(self, value):
+        self.update_json("fins", "sweep_angle", value)
 
-    #     # Load the rocket specs JSON
-    #     rocket_specs_file = "../config/rocket_specs.json"
-    #     with open(rocket_specs_file, "r") as file:
-    #         rocket_specs = json.load(file)
+    def update_tip_chord(self, value):
+        self.update_json("fins", "tip_chord", value)
 
-    #     # Create an instance of AeroCalcs to calculate CG and CP
-    #     aero_calcs = AeroCalcs(rocket_specs, material="fiberglass", motor="K")
-    #     cg = aero_calcs.calculate_center_of_gravity()
-    #     cp = aero_calcs.calculate_center_of_pressure()
+    def update_semi_span(self, value):
+        self.update_json("fins", "semi_span", value)
 
-    #     # Draw the rocket using RocketDrawing
-    #     rocket_drawing = RocketDrawing(rocket_specs, cg, cp)
-    #     rocket_drawing.plot_rocket()
-
-    #     # Redraw the canvas
-    #     self.canvas.draw()
+    def update_root_chord(self, value):
+        self.update_json("fins", "root_chord", value)
 
     def display_rocket_design(self):
         """
