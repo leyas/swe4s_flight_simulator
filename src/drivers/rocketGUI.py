@@ -13,7 +13,10 @@ from physCalcs import PhysCalcs
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1200, 900)  # Adjusted for graph space
+        x_pix = 3600
+        y_pix = 1500
+
+        MainWindow.resize(x_pix, y_pix)  # Adjusted for graph space
 
         # Main Page
         self.mainPage = QtWidgets.QWidget(MainWindow)
@@ -21,7 +24,7 @@ class Ui_MainWindow(object):
 
         # Tab Widget
         self.tabWidget = QtWidgets.QTabWidget(self.mainPage)
-        self.tabWidget.setGeometry(QtCore.QRect(10, 10, 1180, 880))
+        self.tabWidget.setGeometry(QtCore.QRect(10, 10, x_pix-200, y_pix -100))
         self.tabWidget.setObjectName("tabWidget")
 
         # Simulation Tab
@@ -134,6 +137,22 @@ class Ui_MainWindow(object):
 
         self.sim_layout.addWidget(self.material_group, 3, 0)
 
+        # Parachute size
+        self.parachute_group = QtWidgets.QGroupBox("Parachute Customization")
+        self.parachute_layout = QtWidgets.QGridLayout(self.parachute_group)
+
+        self.parachute_label = QtWidgets.QLabel("Materials:")
+        self.parachute_list = QtWidgets.QListWidget()
+        for item in ["Small (15 inch)", "Medium (28 inch)", "Larger (42 inch)"]:
+            self.parachute_list.addItem(item)
+
+        self.parachute_layout.addWidget(self.parachute_label, 4, 0)
+        self.parachute_layout.addWidget(self.parachute_list, 4, 1)
+
+        self.sim_layout.addWidget(self.parachute_group, 4, 0)
+
+
+
         ## Right Panel: Graph and Button for Rocket Design
         self.graph_group1 = QtWidgets.QGroupBox("Rocket Design")
         self.graph_layout1 = QtWidgets.QVBoxLayout(self.graph_group1)
@@ -177,6 +196,41 @@ class Ui_MainWindow(object):
 
         # Add Simulation Tab to Tab Widget
         self.tabWidget.addTab(self.Simulation, "Simulation Tab")
+
+        ##### Information Tab #####
+        self.Information = QtWidgets.QWidget()
+        self.Information.setObjectName("Information")
+
+        # Layout for Information Tab
+        self.info_layout = QtWidgets.QGridLayout(self.Information)
+
+        # All about fins
+        self.fins_info_group = QtWidgets.QGroupBox("Fin Info")
+        self.fins_info_layout = QtWidgets.QGridLayout(self.fins_info_group)
+        self.info_layout.addWidget(self.fins_info_group, 0, 0)
+
+        # All about Nose Cones
+        self.nose_info_group = QtWidgets.QGroupBox("Nose Cone Info")
+        self.nose_info_layout = QtWidgets.QGridLayout(self.nose_info_group)
+        self.info_layout.addWidget(self.nose_info_group, 1, 0)
+
+        # All about motors
+        self.motor_info_group = QtWidgets.QGroupBox("Motor Info")
+        self.motor_info_layout = QtWidgets.QGridLayout(self.motor_info_group)
+        self.info_layout.addWidget(self.motor_info_group, 2, 0)
+
+        # All about static margin
+        self.sm_info_group = QtWidgets.QGroupBox("Static Margin Info")
+        self.sm_info_layout = QtWidgets.QGridLayout(self.sm_info_group)
+        self.info_layout.addWidget(self.sm_info_group, 3, 0)
+
+        # All about recovery
+        self.rec_info_group = QtWidgets.QGroupBox("Recovery Info")
+        self.rec_info_layout = QtWidgets.QGridLayout(self.rec_info_group)
+        self.info_layout.addWidget(self.rec_info_group, 4, 0)
+
+        # Add information Tab to Tab Widget
+        self.tabWidget.addTab(self.Information, "Information Tab")
 
         # Set Central Widget
         MainWindow.setCentralWidget(self.mainPage)
