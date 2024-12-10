@@ -1,0 +1,30 @@
+{
+    "infoTab": [
+      {
+        "group": "Fin Info",
+        "text": "Information about fins and their aerodynamic impact.",
+        "image": "path/to/fins_image.png"
+      },
+      {
+        "group": "Nose Cone Info",
+        "text": "Details on nose cone shapes and their effects on drag.",
+        "image": "path/to/nose_cone_image.png"
+      },
+      {
+        "group": "Motor Info",
+        "text": "Specifications and types of motors used in rockets.",
+        "image": "path/to/motor_image.png"
+      },
+      {
+        "group": "Static Margin Info",
+        "text": "Understanding static margin and stability in flight.",
+        "image": "path/to/static_margin_image.png"
+      },
+      {
+        "group": "Recovery Info",
+        "text": "Recovery methods and parachute designs for safe landing.",
+        "image": "path/to/recovery_image.png"
+      }
+    ]
+  }
+  
