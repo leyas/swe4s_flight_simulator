@@ -3,9 +3,12 @@ from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar
 )
+from PyQt5.QtGui import QPixmap
 import matplotlib.pyplot as plt
 import numpy as np
 import json
+import os
+
 from rocketDrawing import RocketDrawing  # Custom drawing class
 from aeroCalcs import AeroCalcs  # Aero calculations
 from physCalcs import PhysCalcs
@@ -166,8 +169,6 @@ class Ui_MainWindow(object):
 
         self.sim_layout.addWidget(self.parachute_group, 4, 0)
 
-
-
         ## Right Panel: Graph and Button for Rocket Design
         self.graph_group1 = QtWidgets.QGroupBox("Rocket Design")
         self.graph_layout1 = QtWidgets.QVBoxLayout(self.graph_group1)
@@ -208,44 +209,20 @@ class Ui_MainWindow(object):
 
         self.sim_layout.addWidget(self.graph_group2, 2, 1, 2, 1)
 
-
         # Add Simulation Tab to Tab Widget
         self.tabWidget.addTab(self.Simulation, "Simulation Tab")
 
-        ##### Information Tab #####
+        ##### Information Tab ##################
         self.Information = QtWidgets.QWidget()
         self.Information.setObjectName("Information")
 
         # Layout for Information Tab
-        self.info_layout = QtWidgets.QGridLayout(self.Information)
-
-        # All about fins
-        self.fins_info_group = QtWidgets.QGroupBox("Fin Info")
-        self.fins_info_layout = QtWidgets.QGridLayout(self.fins_info_group)
-        self.info_layout.addWidget(self.fins_info_group, 0, 0)
-
-        # All about Nose Cones
-        self.nose_info_group = QtWidgets.QGroupBox("Nose Cone Info")
-        self.nose_info_layout = QtWidgets.QGridLayout(self.nose_info_group)
-        self.info_layout.addWidget(self.nose_info_group, 1, 0)
-
-        # All about motors
-        self.motor_info_group = QtWidgets.QGroupBox("Motor Info")
-        self.motor_info_layout = QtWidgets.QGridLayout(self.motor_info_group)
-        self.info_layout.addWidget(self.motor_info_group, 2, 0)
-
-        # All about static margin
-        self.sm_info_group = QtWidgets.QGroupBox("Static Margin Info")
-        self.sm_info_layout = QtWidgets.QGridLayout(self.sm_info_group)
-        self.info_layout.addWidget(self.sm_info_group, 3, 0)
-
-        # All about recovery
-        self.rec_info_group = QtWidgets.QGroupBox("Recovery Info")
-        self.rec_info_layout = QtWidgets.QGridLayout(self.rec_info_group)
-        self.info_layout.addWidget(self.rec_info_group, 4, 0)
+        #self.info_layout = QtWidgets.QGridLayout(self.Information)
 
         # Add information Tab to Tab Widget
         self.tabWidget.addTab(self.Information, "Information Tab")
+
+        self.setup_info_tab()
 
         # Set Central Widget
         MainWindow.setCentralWidget(self.mainPage)
@@ -453,6 +430,59 @@ class Ui_MainWindow(object):
             self.flight_canvas.draw()
         except Exception as e:
             print(f"Error in plot_y_position: {e}")
+
+    def setup_info_tab(self):
+        """ Sets up info tab based on json file"""
+        json_file = "C:\\Users\\lshaw\\Desktop\\swe4s\\project\\swe4s_flight_simulator\\src\\config\\info_content.json"
+        pictures_folder = "C:\\Users\\lshaw\\Desktop\\swe4s\\project\\swe4s_flight_simulator\\src\\pictures"
+        
+        # Create a scroll area
+        scroll_area = QtWidgets.QScrollArea(self.Information)
+        scroll_area.setWidgetResizable(True)
+        
+        # Create a container widget for the scroll area
+        container_widget = QtWidgets.QWidget()
+        scroll_area.setWidget(container_widget)
+
+        # Create a layout for the container widget
+        container_layout = QtWidgets.QGridLayout(container_widget)
+        
+        try:
+            with open(json_file, 'r') as file:
+                data = json.load(file)
+
+            row = 0
+            for block in data.get("infoTab", []):
+                group_box = QtWidgets.QGroupBox(block["group"])
+                group_layout = QtWidgets.QVBoxLayout(group_box)
+                
+                # Add text
+                text_label = QtWidgets.QLabel(block["text"])
+                text_label.setWordWrap(True)
+                group_layout.addWidget(text_label)
+                
+                # Add image if exists
+                if 'image' in block and block["image"]:
+                    image_path = os.path.join(pictures_folder, block["image"])
+                    if os.path.exists(image_path):
+                        pixmap = QPixmap(image_path)
+                        image_label = QtWidgets.QLabel()
+                        image_label.setPixmap(pixmap.scaled(300, 300, QtCore.Qt.KeepAspectRatio))
+                        group_layout.addWidget(image_label)
+                    else:
+                        print(f"Image not found: {image_path}")  # Debugging log
+
+                    # Add the group box to the layout
+                    container_layout.addWidget(group_box, row, 0)
+                    row += 1  # Move to the next row
+
+        except Exception as e:
+            error_label = QtWidgets.QLabel(f"Failed to load content: {e}")
+            container_layout.addWidget(error_label, 0, 0)
+
+        # Add the scroll area to the main layout of the Information tab
+        self.info_layout = QtWidgets.QVBoxLayout(self.Information)
+        self.info_layout.addWidget(scroll_area)
 
 
 if __name__ == "__main__":
