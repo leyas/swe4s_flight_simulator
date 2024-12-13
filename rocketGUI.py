@@ -166,7 +166,7 @@ class Ui_MainWindow(object):
         self.material_group.setFont(material_font)
         self.material_layout = QtWidgets.QGridLayout(self.material_group)
 
-        self.material_label = QtWidgets.QLabel("Materials:")
+        self.material_label = QtWidgets.QLabel("Material:")
         self.material_label.setFont(label_font)
         self.material_list = QtWidgets.QListWidget()
         for item in ["Fiberglass", "Blue Tube"]:
@@ -370,50 +370,51 @@ class Ui_MainWindow(object):
     def update_material(self, material):
         mat = material.text().lower()
         if mat == "fiberglass":
-            self.update_json("materials", "density", 1.8)
-            self.update_json("materials", "thickness", 3)
+            self.update_json("material", "density", 1.8)
+            self.update_json("material", "thickness", 3)
         else: 
-            self.update_json("materials", "cd", 1.15)
-            self.update_json("materials", "mass", 3)
+            self.update_json("material", "density", 1.15)
+            self.update_json("material", "thickness", 3)
 
     def update_motor(self, motor):
-        if motor == "G":
-            self.update_json("motor", "thrust", 500)
+        mot = motor.text().lower()
+        if mot == "g":
+            self.update_json("motor", "thrust", 10)
             self.update_json("motor", "burn_time", 2.5)
             self.update_json("motor", "mass", 100)
             self.update_json("motor", "length", 4)
             self.update_json("motor", "diameter", 1)
 
-        elif motor == "H":
-            self.update_json("motor", "thrust", 1000)
+        elif mot == "h":
+            self.update_json("motor", "thrust", 100)
             self.update_json("motor", "burn_time", 2.75)
             self.update_json("motor", "mass", 200)
             self.update_json("motor", "length", 6)
             self.update_json("motor", "diameter", 1.5)
         
-        elif motor == "I":
-            self.update_json("motor", "thrust", 2000)
+        elif mot == "i":
+            self.update_json("motor", "thrust", 200)
             self.update_json("motor", "burn_time", 3)
             self.update_json("motor", "mass", 300)
             self.update_json("motor", "length", 8)
             self.update_json("motor", "diameter", 2)
         
-        elif motor == "J":
-            self.update_json("motor", "thrust", 4000)
+        elif mot == "j":
+            self.update_json("motor", "thrust", 400)
             self.update_json("motor", "burn_time", 3.25)
             self.update_json("motor", "mass", 400)
             self.update_json("motor", "length", 9)
             self.update_json("motor", "diameter", 2.5)
         
-        elif motor == "K":
-            self.update_json("motor", "thrust", 8000)
+        elif mot == "k":
+            self.update_json("motor", "thrust", 800)
             self.update_json("motor", "burn_time", 3.5)
             self.update_json("motor", "mass", 500)
             self.update_json("motor", "length", 10)
             self.update_json("motor", "diameter", 3)
 
         else: # L
-            self.update_json("motor", "thrust", 16000)
+            self.update_json("motor", "thrust", 1600)
             self.update_json("motor", "burn_time", 3.75)
             self.update_json("motor", "mass", 600)
             self.update_json("motor", "length", 11)
@@ -454,7 +455,9 @@ class Ui_MainWindow(object):
             time, x, y, vx, vy = phys_calcs.simulate()
 
             # Compute velocity magnitude
+            
             velocity = np.sqrt(vx**2 + vy**2)
+            
 
             # Normalize velocities for color gradient
             norm = plt.Normalize(velocity.min(), velocity.max())

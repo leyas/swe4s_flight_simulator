@@ -10,11 +10,11 @@ class AeroCalcs:
         self.fins = self.rocket_specs["fins"]
         self.motor = self.rocket_specs["motor"]
         self.parachute = self.rocket_specs["parachute"]
-        self.materials = self.rocket_specs["materials"]
+        self.material = self.rocket_specs["material"]
 
         # Material properties
-        self.density = self.materials["density"] 
-        self.thickness = self.materials["thickness"] / 10  # Convert mm to cm for calculations
+        self.density = self.material["density"] 
+        self.thickness = self.material["thickness"] / 10  # Convert mm to cm for calculations
 
     def calculate_air_density(self, altitude):
         """Calculate air density at a given altitude in g/cm³."""
@@ -106,4 +106,4 @@ class AeroCalcs:
         air_density = self.calculate_air_density(altitude)
         frontal_area = np.pi * (self.airframe["diameter"] * 2.54 / 2) ** 2  # cm²
         drag_force = 0.5 * cd * air_density * frontal_area * (velocity * 100) ** 2  # Velocity in cm/s
-        return drag_force / 1000  # Convert drag force to N
+        return drag_force / 300  # Convert drag force to N

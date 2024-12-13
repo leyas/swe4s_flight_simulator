@@ -20,11 +20,14 @@ class PhysCalcs:
         x, y_pos, vx, vy, mass = y
 
         # Prevent negative altitude
-        if y_pos < 0:
+        if y_pos <= 0:
             return [0, 0, 0, 0, 0]
 
         # Calculate velocity magnitude
+    
+    
         velocity = np.sqrt(vx**2 + vy**2)
+
 
         # Determine air density and drag coefficient
         rho = self.aero_calcs.calculate_air_density(y_pos)
@@ -34,7 +37,7 @@ class PhysCalcs:
         # Calculate drag force components
         drag = 0.5 * cd * rho * frontal_area * velocity**2
         drag_x = -drag * (vx / velocity) if velocity > 0 else 0
-        drag_y = -drag * (vy / velocity) - mass * 9.81 if velocity > 0 else -mass * 9.81
+        drag_y = -drag * (vy / velocity) - mass * 32 if velocity > 0 else -mass * 32
 
         # Thrust during burn
         current_thrust = thrust if t <= burn_time else 0
@@ -59,7 +62,7 @@ class PhysCalcs:
         burn_time = self.motor["burn_time"]
         thrust = self.motor["thrust"]
         initial_mass = self.aero_calcs.calculate_center_of_gravity() + self.motor["mass"] / 1000  # Includes motor mass
-        initial_state = [0, 0, 0, 100, initial_mass]  # Initial x, y, vx, vy, mass
+        initial_state = [1, 1, 1, 100, initial_mass]  # Initial x, y, vx, vy, mass
 
         # Ascent and coasting phase
         ascent_result = solve_ivp(
@@ -70,8 +73,19 @@ class PhysCalcs:
             dense_output=True,
             max_step=0.1
         )
+        t = ascent_result.t
+        y0 = ascent_result.y[0]
+        y1 = ascent_result.y[1]  # y-position (assuming y1 is the y-position)
+        y2 = ascent_result.y[2]
+        y3 = ascent_result.y[3]  # y-velocity (assuming y3 is the y-velocity)
 
-        return ascent_result.t, ascent_result.y[0], ascent_result.y[1], ascent_result.y[2], ascent_result.y[3]
+        # Loop over the time steps and check if y1 == 0, if so set y3 to 0 at the corresponding time step
+        for i in range(len(y1)):
+            if y1[i] <= 0.1:  # When y-position is 0 (i.e., the rocket hits the ground)
+                 # Set y-velocity to 0 when the rocket reaches the ground
+                y3[i] = 0
+                
+        return t, y0, y1, y2, y3
 
     def plot_position_with_gradient(self, x, y, vx, vy):
         """Plot x, y positions with a color gradient based on velocity."""
@@ -90,8 +104,10 @@ class PhysCalcs:
             raise ValueError("x, y, vx, and vy must all have the same length.")
 
         # Calculate velocity magnitude
+        
         velocity = np.sqrt(vx**2 + vy**2)
-
+        
+    
         # Normalize velocities for coloring
         norm = plt.Normalize(velocity.min(), velocity.max())
 
@@ -172,7 +188,9 @@ if __name__ == "__main__":
     time, x, y, vx, vy = phys_calcs.simulate()
 
     # Calculate velocity magnitude
+   
     velocity = np.sqrt(vx**2 + vy**2)
+    
 
     # Plot y-position over time with velocity gradient
     phys_calcs.plot_y_position_with_gradient(time, y, velocity)
