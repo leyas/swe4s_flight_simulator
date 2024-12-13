@@ -20,32 +20,17 @@ The project includes two primary calculation modules:
 
 1. Clone the repository: To clone the repository, run the following command:
    ```bash
-   git clone https://github.com/your-username/rocket-flight-simulation.git
+   git clone https://github.com/leyas/swe4s_flight_simulator.git
 2. Install the required Python dependencies: Navigate to the project directory and install the necessary dependencies by running:
 
-'''bash
-pip install -r requirements.txt
+    ```bash
+    pip install -r requirements.txt
 
-Ensure you have the necessary files: The project requires a rocket_specs.json file that contains the specifications of the rocket. You can modify this file to define your custom rocket parameters. A sample rocket_specs.json file is included in the repository.
+3. Ensure you have the necessary files: list the contents of your remote repository and ensure the list matches those present here on the webpage 
 
-Usage
-Define your rocket's specifications in the rocket_specs.json file.
-You can adjust the material and motor selection based on the available options in the file.
-Run the phys_calcs.py script to simulate the rocket's flight trajectory.
-The script will output the rocket's position and velocity at each time step and will also generate a plot of the rocket's trajectory.
-Features
-Input Rocket Parameters: Define rocket specifications in a JSON file.
-Aerodynamic Calculations: Calculate drag, center of gravity (CG), and other aerodynamic properties.
-Flight Simulation: Simulate the rocket's ascent and descent using numerical integration.
-Trajectory Plotting: Visualize the rocket's flight path with position and velocity over time.
-Customizable Material and Motor: Choose different materials and motors for the rocket to see their effects on performance.
-Project Structure
-rocket_specs.json: The file containing the rocket's specifications.
-aeroCalcs.py: A Python file that performs aerodynamic calculations.
-physCalcs.py: A Python file that handles the physical simulation of the rocket’s flight.
-requirements.txt: A list of dependencies required to run the project.
-README.md: This file containing project documentation.
-Requirements
+## Usage
+
+## Requirements
 Python 3.x
 NumPy
 Matplotlib
