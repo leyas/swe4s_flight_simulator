@@ -581,13 +581,10 @@ class Ui_MainWindow(object):
         self.Information = QtWidgets.QWidget()
         self.Information.setObjectName("Information")
 
-        # Layout for Information Tab
-        #self.info_layout = QtWidgets.QGridLayout(self.Information)
-
         # Add information Tab to Tab Widget
         self.tabWidget.addTab(self.Information, "Information Tab")
 
-        self.setup_info_tab()
+        self.setup_info_tab(screen_height)
 
         # Set Central Widget
         MainWindow.setCentralWidget(self.mainPage)
@@ -799,7 +796,7 @@ class Ui_MainWindow(object):
         except Exception as e:
             print(f"Error in plot_y_position: {e}")
 
-    def setup_info_tab(self):
+    def setup_info_tab(self, screen_height):
         """ Sets up info tab based on json file"""
         json_file = "C:\\Users\\lshaw\\Desktop\\swe4s\\project\\swe4s_flight_simulator\\src\\config\\info_content.json"
         pictures_folder = "C:\\Users\\lshaw\\Desktop\\swe4s\\project\\swe4s_flight_simulator\\src\\pictures"
@@ -811,6 +808,7 @@ class Ui_MainWindow(object):
         # Create a container widget for the scroll area
         container_widget = QtWidgets.QWidget()
         scroll_area.setWidget(container_widget)
+        scroll_area.setStyleSheet("background-color: white;")
 
         # Create a layout for the container widget
         container_layout = QtWidgets.QGridLayout(container_widget)
@@ -821,28 +819,35 @@ class Ui_MainWindow(object):
 
             row = 0
             for block in data.get("infoTab", []):
-                group_box = QtWidgets.QGroupBox(block["group"])
-                group_layout = QtWidgets.QVBoxLayout(group_box)
-                
-                # Add text
+                text_group_box = QtWidgets.QGroupBox(block["group"])
+                text_group_box.setStyleSheet("QGroupBox { font-weight: bold; border: none; padding-top: 40px; }")
+                group_font = text_group_box.font()
+                group_font.setPointSize(int(screen_height * 0.006))
+                text_group_box.setFont(group_font)
+                text_group_layout = QtWidgets.QVBoxLayout(text_group_box)
                 text_label = QtWidgets.QLabel(block["text"])
                 text_label.setWordWrap(True)
-                group_layout.addWidget(text_label)
-                
-                # Add image if exists
+                text_group_layout.addWidget(text_label)
+                container_layout.addWidget(text_group_box, row, 0) 
+
+                # Add image group box if an image exists
                 if 'image' in block and block["image"]:
+                    image_group_box = QtWidgets.QGroupBox()
+                    image_group_box.setStyleSheet("QGroupBox { background-color: white; border: none;}")
+                    image_group_layout = QtWidgets.QVBoxLayout(image_group_box)
                     image_path = os.path.join(pictures_folder, block["image"])
                     if os.path.exists(image_path):
                         pixmap = QPixmap(image_path)
                         image_label = QtWidgets.QLabel()
-                        image_label.setPixmap(pixmap.scaled(300, 300, QtCore.Qt.KeepAspectRatio))
-                        group_layout.addWidget(image_label)
+                        image_label.setPixmap(pixmap.scaled(int(3*screen_height/5), int(2*screen_height/5), QtCore.Qt.KeepAspectRatio))
+                        image_group_layout.addWidget(image_label)
                     else:
                         print(f"Image not found: {image_path}")  # Debugging log
 
-                    # Add the group box to the layout
-                    container_layout.addWidget(group_box, row, 2)
-                    row += 1  # Move to the next row
+                    container_layout.addWidget(image_group_box, row, 1)
+                row += 1
+                
+
 
         except Exception as e:
             error_label = QtWidgets.QLabel(f"Failed to load content: {e}")
