@@ -53,7 +53,8 @@ The GUI interacts with two primary calculation modules:
 4. Observe flight simulation and record results. 
 
 ## Example Output
-
+![Rocket Sketch Output](rocketoutlinescreenshot.png)
+![Flight Path Output](rocketflightpath.png)
 ## Requirements
 - Python 3.12
 - NumPy
