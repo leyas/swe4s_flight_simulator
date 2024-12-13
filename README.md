@@ -32,7 +32,7 @@ The GUI interacts with two primary calculation modules:
 3. Set up the environment using the provided `environment.yml` file:
     If you're using **conda**, you can create a virtual environment with the required dependencies by running:
     ```bash
-    conda env create -f environment.yml
+    conda env create -f env.yml
     ```
 
 4. Activate the environment:
