@@ -37,7 +37,7 @@ The GUI interacts with two primary calculation modules:
 
 4. Activate the environment:
     ```bash
-    conda activate environment.yml
+    conda activate env.yml
     ```
 
 5. You are now ready to run the project!
