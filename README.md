@@ -2,9 +2,12 @@
 
 ## Overview
 
-This project simulates the flight trajectory of a rocket using both **aerodynamic** and **physical** calculations based on user-defined parameters. The goal is to compute the rocket's 1-dimensional flight path (position and velocity) from launch to landing. The simulation accounts for various factors such as airframe dimensions, motor thrust, drag, gravity, and more.
+This project simulates the flight trajectory of a rocket using both **aerodynamic** and **physical** calculations based on user-defined parameters. The goal is to compute and visualize the rocket's 1-dimensional flight path (position and velocity) from launch to landing. The simulation accounts for various factors such as airframe dimensions, motor thrust, drag, gravity, and more.
 
-The project includes two primary calculation modules:
+The project interacts with the user through our GUI:
+- **rocketGUI**: prompts user to input rocket characteristics such as its geometry, motor class, material, and parachute diameter. 
+
+The GUI interacts with two primary calculation modules:
 - **AeroCalcs**: Performs aerodynamic calculations (e.g., air density, drag coefficient, center of gravity).
 - **PhysCalcs**: Handles the physical simulation of the rocket's flight trajectory using numerical integration (e.g., velocity, position, and mass changes).
 
