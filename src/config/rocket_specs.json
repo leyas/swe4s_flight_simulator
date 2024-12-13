@@ -1,25 +1,25 @@
 {
     "motor": {
-        "thrust": 800,
-        "burn_time": 3.5,
-        "mass": 500,
-        "length": 10,
-        "diameter": 3
+        "thrust": 4000,
+        "burn_time": 3.75,
+        "mass": 600,
+        "length": 11,
+        "diameter": 3.5
     },
     "fins": {
         "form": 3,
         "sweep_angle": 20.0,
-        "tip_chord": 5.0,
+        "tip_chord": 3.0,
         "semi_span": 5.0,
         "root_chord": 10.0
     },
     "air_frame": {
-        "diameter": 2.0,
-        "length": 60.0
+        "diameter": 3.0,
+        "length": 55.0
     },
     "nose_cone": {
-        "shape": "elliptic",
-        "length": 7.0
+        "shape": "tangent_ogive",
+        "length": 5.0
     },
     "launch_conditions": {
         "wind": 0,

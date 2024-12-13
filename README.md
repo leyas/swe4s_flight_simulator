@@ -19,6 +19,20 @@ The GUI interacts with two primary calculation modules:
 - **Trajectory Plotting**: Provides a visual showing the rocket's flight path with position and velocity over time.
 - **Info Page**: Section in GUI with more information on rocket parameter definitions for beginners.
 
+## GUI
+Below is what you'd expect the GUI to look like after running rocketGUI.py
+![Simulation Tab of GUI](gui_simulation.png)
+![Information Tab of GUI](gui_infotab.png)
+
+## Required Modules
+- Python 3.12
+- NumPy
+- Matplotlib
+- SciPy
+- PyQt5
+- json
+- os
+
 ## Installation
 
 1. Clone the repository: To clone the repository, run the following command:
@@ -27,7 +41,7 @@ The GUI interacts with two primary calculation modules:
 2. Install the required Python dependencies: Navigate to the project directory and install the necessary dependencies by running:
 
     ```bash
-    cd swe4s_flight_simulator/config
+    cd .../swe4s_flight_simulator/config
 
 3. Set up the environment using the provided `env.yml` file:
     If you're using **conda**, you can create a virtual environment with the required dependencies by running:
@@ -44,7 +58,10 @@ The GUI interacts with two primary calculation modules:
 
 ## Usage
 
-1. After installation, run the GUI file. You will be prompted to input characteristics of the rocket you plan on simulating.
+1. After installation, run the GUI file. Please make sure you are in the correct directory: ` .../swe4s_flight_simulator` You can run the GUI by typing the following in the terminal:
+    ```bash
+    python rocketGUI.py
+    ```
 
 2. Correctly input values that characterize your rocket. 
 
@@ -52,18 +69,16 @@ The GUI interacts with two primary calculation modules:
 
 4. Observe flight simulation and record results. 
 
-Please note, the GUI charastic values use whatever is in the json file. So, if you press display rocket without inputting any new values, it may show you an old rendering from pre-existing values. The same goes for plot z position.
+Please note, the GUI charastic values use whatever is in the json file. So, if you press display rocket without inputting any new values, it may show you an old rendering from pre-existing values. The same goes for plot z position. Additionally, if you create a fin that is mathmatically impossible, the code will override and show the closest possible result.
 
 For more information about rocket characteristics, please click the information tab in the top left corner. There, you can read about nose cone shapes, motor classes, rocket stability, and more!
 
 ## Example Output
 ![Rocket Sketch Output](rocketoutlinescreenshot.png)
 ![Flight Path Output](rocketflightpath.png)
-## Requirements
-- Python 3.12
-- NumPy
-- Matplotlib
-- SciPy
-- PyQt5
-- json
-- os
+
+## Known errors
+The descent rate is not affected by parachute size as much as it should. This is a math error, and will be fixed before young rocketeers test out the code.
+
+## Directory Tree
+![Directory Tree](directory_tree.png)

@@ -382,42 +382,42 @@ class Ui_MainWindow(object):
     def update_motor(self, motor):
         mot = motor.text().lower()
         if mot == "g":
-            self.update_json("motor", "thrust", 10)
+            self.update_json("motor", "thrust", 100)
             self.update_json("motor", "burn_time", 2.5)
             self.update_json("motor", "mass", 100)
             self.update_json("motor", "length", 4)
             self.update_json("motor", "diameter", 1)
 
         elif mot == "h":
-            self.update_json("motor", "thrust", 100)
+            self.update_json("motor", "thrust", 500)
             self.update_json("motor", "burn_time", 2.75)
             self.update_json("motor", "mass", 200)
             self.update_json("motor", "length", 6)
             self.update_json("motor", "diameter", 1.5)
         
         elif mot == "i":
-            self.update_json("motor", "thrust", 200)
+            self.update_json("motor", "thrust", 1000)
             self.update_json("motor", "burn_time", 3)
             self.update_json("motor", "mass", 300)
             self.update_json("motor", "length", 8)
             self.update_json("motor", "diameter", 2)
         
         elif mot == "j":
-            self.update_json("motor", "thrust", 400)
+            self.update_json("motor", "thrust", 1500)
             self.update_json("motor", "burn_time", 3.25)
             self.update_json("motor", "mass", 400)
             self.update_json("motor", "length", 9)
             self.update_json("motor", "diameter", 2.5)
         
         elif mot == "k":
-            self.update_json("motor", "thrust", 800)
+            self.update_json("motor", "thrust", 2000)
             self.update_json("motor", "burn_time", 3.5)
             self.update_json("motor", "mass", 500)
             self.update_json("motor", "length", 10)
             self.update_json("motor", "diameter", 3)
 
         else: # L
-            self.update_json("motor", "thrust", 1600)
+            self.update_json("motor", "thrust", 4000)
             self.update_json("motor", "burn_time", 3.75)
             self.update_json("motor", "mass", 600)
             self.update_json("motor", "length", 11)
