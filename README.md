@@ -81,4 +81,4 @@ For more information about rocket characteristics, please click the information 
 The descent rate is not affected by parachute size as much as it should. This is a math error, and will be fixed before young rocketeers test out the code.
 
 ## Directory Tree
-![Directory Tree](directory_tree.png)
+![Directory Tree](src/pictures/directory_tree.png)
