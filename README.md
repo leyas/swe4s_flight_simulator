@@ -57,9 +57,10 @@ Please note, the GUI charastic values use whatever is in the json file. So, if y
 For more information about rocket characteristics, please click the information tab in the top left corner. There, you can read about nose cone shapes, motor classes, rocket stability, and more!
 
 ## Example Output
-
-## Required Modules
-- Python 
+![Rocket Sketch Output](rocketoutlinescreenshot.png)
+![Flight Path Output](rocketflightpath.png)
+## Requirements
+- Python 3.12
 - NumPy
 - Matplotlib
 - SciPy
