@@ -107,3 +107,12 @@ class AeroCalcs:
         frontal_area = np.pi * (self.airframe["diameter"] * 2.54 / 2) ** 2  # cm²
         drag_force = 0.5 * cd * air_density * frontal_area * (velocity * 100) ** 2  # Velocity in cm/s
         return drag_force / 300  # Convert drag force to N
+    
+    def calculate_v_terminal_parachute(self, altitude):
+        chute_cd = self.parachute["cd"]
+        chute_mass = self.parachute["mass"]
+        chute_area = self.parachute["area"]
+        air_density = self.calculate_air_density(altitude)
+        g = 9.81
+        chute_vt = np.sqrt((2* chute_mass *g )/(chute_cd * air_density * chute_area))
+        return chute_vt

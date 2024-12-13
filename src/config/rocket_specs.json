@@ -26,8 +26,9 @@
         "altitude": 0
     },
     "parachute": {
-        "cd": 1.8,
-        "mass": 127.6
+        "cd": 1.5,
+        "mass": 7,
+        "area": 72
     },
     "material": {
         "density": 1.8,

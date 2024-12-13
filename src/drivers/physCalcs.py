@@ -14,6 +14,7 @@ class PhysCalcs:
 
         self.aero_calcs = AeroCalcs(self.rocket_specs)
         self.motor = self.rocket_specs["motor"]
+        self.parachute = self.rocket_specs["parachute"]
 
     def dynamics(self, t, y, burn_time, thrust):
         """Compute the dynamics (velocity and acceleration) of the rocket."""
@@ -81,6 +82,10 @@ class PhysCalcs:
 
         # Loop over the time steps and check if y1 == 0, if so set y3 to 0 at the corresponding time step
         for i in range(len(y1)):
+            apogee_index = np.argmax(y1)
+            time_apogee = ascent_result.t[apogee_index]
+            if t[i] > time_apogee:
+                y3[i] = self.aero_calcs.calculate_v_terminal_parachute(y1[i])
             if y1[i] <= 0.1:  # When y-position is 0 (i.e., the rocket hits the ground)
                  # Set y-velocity to 0 when the rocket reaches the ground
                 y3[i] = 0
@@ -197,3 +202,15 @@ if __name__ == "__main__":
 
     # Plot position with gradient
     # phys_calcs.plot_position_with_gradient(x, y, vx, vy)
+    def calculate_air_density(self, altitude):
+        """Calculate air density at a given altitude in g/cm³."""
+        if altitude <= 11000:  # Troposphere
+            temp = 288.15 - 0.0065 * altitude  # Temperature in Kelvin
+            pressure = 101325 * (temp / 288.15) ** 5.2561  # Pressure in Pascals
+        else:  # Above troposphere, simplified model
+            temp = 216.65  # Temperature constant in Kelvin
+            pressure = 22632 * np.exp(-0.0001577 * (altitude - 11000))  # Pressure in Pascals
+
+        density_kg_m3 = pressure / (287.05 * temp)  # Air density in kg/m³
+        density_g_cm3 = density_kg_m3 / 1000  # Convert to g/cm³
+        return density_g_cm3

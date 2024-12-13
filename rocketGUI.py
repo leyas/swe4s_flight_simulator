@@ -359,13 +359,16 @@ class Ui_MainWindow(object):
         size = parachute_size.text().lower()
         if size == "small":
             self.update_json("parachute", "cd", 1.25)
-            self.update_json("parachute", "mass", 60)
+            self.update_json("parachute", "mass", 4)
+            self.update_json("parachute", "area", 48)
         elif size == "medium":
             self.update_json("parachute", "cd", 1.5)
-            self.update_json("parachute", "mass", 70)
+            self.update_json("parachute", "mass", 7)
+            self.update_json("parachute", "area", 72)
         else: 
             self.update_json("parachute", "cd", 1.8)
-            self.update_json("parachute", "mass", 127.6)
+            self.update_json("parachute", "mass", 10)
+            self.update_json("parachute", "area", 120)
 
     def update_material(self, material):
         mat = material.text().lower()
@@ -448,7 +451,7 @@ class Ui_MainWindow(object):
         """Plot Y position with gradient in the embedded Matplotlib graph."""
         self.flight_figure.clear()
         ax = self.flight_figure.add_subplot(111)
-
+        
         phys_calcs = PhysCalcs(self.json_path)
         try:
             # Simulate and get data
