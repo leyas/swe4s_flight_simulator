@@ -27,7 +27,7 @@ The GUI interacts with two primary calculation modules:
 2. Install the required Python dependencies: Navigate to the project directory and install the necessary dependencies by running:
 
     ```bash
-    cd swe4s_flight_simulator
+    cd swe4s_flight_simulator/config
 
 3. Set up the environment using the provided `environment.yml` file:
     If you're using **conda**, you can create a virtual environment with the required dependencies by running:
