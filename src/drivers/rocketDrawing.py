@@ -6,8 +6,7 @@ class RocketDrawing:
         self.rocket_specs = rocket_specs
         self.cg = cg  # Center of Gravity
         self.cp = cp  # Center of Pressure
-        self.motor = self.rocket_specs["motors"]["K"]
-
+        self.motor = self.rocket_specs["motor"]
         # Extract rocket components
         self.airframe = self.rocket_specs["air_frame"]
         self.nose_cone = self.rocket_specs["nose_cone"]
@@ -89,12 +88,12 @@ class RocketDrawing:
 
             for sign in [-1, 1]:  # Top (+1) and bottom (-1) fins
                 # Define the fin polygon points
-                fin_base_x = np.array([0, root_chord, fin_tip_x, 0])
+                fin_base_x = np.array([0, 0, tip_chord, root_chord])
                 fin_base_y = np.array([
-                    sign * diameter / 2,  # Start at the airframe edge
-                    sign * diameter / 2,  # Root chord position
-                    sign * (diameter / 2 + semi_span),  # Tip of the fin
-                    sign * diameter / 2  # Return to airframe edge
+                    sign * (diameter / 2),  # Start at the airframe edge
+                    sign * semi_span,  # Root chord position
+                    sign * semi_span,  # Tip of the fin
+                    sign * (diameter / 2) # Return to airframe edge
                 ])
 
                 # Plot the fin

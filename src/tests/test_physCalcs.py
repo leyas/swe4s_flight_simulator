@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import json
-from physCalcs import PhysCalcs  # Import the PhysCalcs class
+from src.drivers.physCalcs import PhysCalcs  # Import the PhysCalcs class
 
 class TestPhysCalcs(unittest.TestCase):
 

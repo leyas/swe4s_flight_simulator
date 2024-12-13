@@ -4,17 +4,16 @@ from matplotlib.animation import FuncAnimation
 from matplotlib.collections import LineCollection
 import json
 from scipy.integrate import solve_ivp
-from aeroCalcs import AeroCalcs
+from src.drivers.aeroCalcs import AeroCalcs
 
 
 class PhysCalcs:
-    def __init__(self, rocket_specs_file, material="fiberglass", motor="K"):
+    def __init__(self, rocket_specs_file):
         with open(rocket_specs_file, "r") as file:
             self.rocket_specs = json.load(file)
 
-        self.aero_calcs = AeroCalcs(self.rocket_specs, material=material, motor=motor)
-        self.motor = self.rocket_specs["motors"][motor]
-        self.parachute = self.rocket_specs["parachute"]
+        self.aero_calcs = AeroCalcs(self.rocket_specs)
+        self.motor = self.rocket_specs["motor"]
 
     def dynamics(self, t, y, burn_time, thrust):
         """Compute the dynamics (velocity and acceleration) of the rocket."""
@@ -166,7 +165,8 @@ class PhysCalcs:
 
 if __name__ == "__main__":
     # Create an instance
-    phys_calcs = PhysCalcs("../config/rocket_specs.json", material="fiberglass", motor="K")
+    material = "blue_tube"
+    phys_calcs = PhysCalcs("../config/rocket_specs.json")
 
     # Simulate the trajectory
     time, x, y, vx, vy = phys_calcs.simulate()
