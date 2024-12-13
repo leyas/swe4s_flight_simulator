@@ -21,8 +21,8 @@ The GUI interacts with two primary calculation modules:
 
 ## GUI
 Below is what you'd expect the GUI to look like after running rocketGUI.py
-![Simulation Tab of GUI](gui_simulation.png)
-![Information Tab of GUI](gui_infotab.png)
+![Simulation Tab of GUI](src/pictures/gui_simulation.png)
+![Information Tab of GUI](src/pictures/gui_infotab.png)
 
 ## Required Modules
 - Python 
@@ -74,8 +74,8 @@ Please note, the GUI characteristic values use whatever is in the json file. So,
 For more information about rocket characteristics, please click the information tab in the top left corner. There, you can read about nose cone shapes, motor classes, rocket stability, and more!
 
 ## Example Output
-![Rocket Sketch Output](rocketoutlinescreenshot.png)
-![Flight Path Output](rocketflightpath.png)
+![Rocket Sketch Output](src/pictures/rocketoutlinescreenshot.png)
+![Flight Path Output](src/pictures/rocketflightpath.png)
 
 ## Known errors
 The descent rate is not affected by parachute size as much as it should. This is a math error, and will be fixed before young rocketeers test out the code.
