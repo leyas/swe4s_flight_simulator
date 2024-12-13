@@ -21,11 +21,11 @@ The project includes two primary calculation modules:
 1. Clone the repository: To clone the repository, run the following command:
    ```bash
    git clone https://github.com/your-username/rocket-flight-simulation.git
-Install the required Python dependencies: Navigate to the project directory and install the necessary dependencies by running:
+2. Install the required Python dependencies: Navigate to the project directory and install the necessary dependencies by running:
 
-bash
-Copy code
+'''bash
 pip install -r requirements.txt
+
 Ensure you have the necessary files: The project requires a rocket_specs.json file that contains the specifications of the rocket. You can modify this file to define your custom rocket parameters. A sample rocket_specs.json file is included in the repository.
 
 Usage
