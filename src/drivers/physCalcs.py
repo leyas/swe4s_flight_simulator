@@ -4,7 +4,7 @@ from matplotlib.animation import FuncAnimation
 from matplotlib.collections import LineCollection
 import json
 from scipy.integrate import solve_ivp
-from aeroCalcs import AeroCalcs
+from src.drivers.aeroCalcs import AeroCalcs
 
 
 class PhysCalcs:
