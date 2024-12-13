@@ -16,6 +16,7 @@ from src.drivers.physCalcs import PhysCalcs
 class Ui_MainWindow(object):
 
     def setupUi(self, MainWindow):
+        self.json_path = os.path.join(os.path.dirname(__file__), "src\\config\\rocket_specs.json")
         MainWindow.setObjectName("MainWindow")
 
         # Get screen dimensions
@@ -314,15 +315,15 @@ class Ui_MainWindow(object):
 
     def update_json(self, section, key, value):
         """Update the JSON file with the specified key-value pair."""
-        json_file = "src/config/rocket_specs.json"
+        
         try:
-            with open(json_file, "r") as file:
+            with open(self.json_path, "r") as file:
                 data = json.load(file)
 
             if section in data and key in data[section]:
                 data[section][key] = value
 
-            with open(json_file, "w") as file:
+            with open(self.json_path, "w") as file:
                 json.dump(data, file, indent=4)
 
         except Exception as e:
@@ -427,8 +428,7 @@ class Ui_MainWindow(object):
         ax = self.design_figure.add_subplot(111)
 
         # Load the rocket specs JSON
-        rocket_specs_file = "src/config/rocket_specs.json"
-        with open(rocket_specs_file, "r") as file:
+        with open(self.json_path, "r") as file:
             rocket_specs = json.load(file)
 
         # Create an instance of AeroCalcs to calculate CG and CP
@@ -448,7 +448,7 @@ class Ui_MainWindow(object):
         self.flight_figure.clear()
         ax = self.flight_figure.add_subplot(111)
 
-        phys_calcs = PhysCalcs("src/config/rocket_specs.json")
+        phys_calcs = PhysCalcs(self.json_path)
         try:
             # Simulate and get data
             time, x, y, vx, vy = phys_calcs.simulate()
@@ -487,8 +487,8 @@ class Ui_MainWindow(object):
 
     def setup_info_tab(self, screen_height, ):
         """ Sets up info tab based on json file"""
-        json_file = "src/config/info_content.json"
-        pictures_folder = "src/pictures"
+        info_path = os.path.join(os.path.dirname(__file__), "src\\config\\info_content.json")
+        pictures_folder = os.path.join(os.path.dirname(__file__), "src\\pictures")
         
         # Create a scroll area
         scroll_area = QtWidgets.QScrollArea(self.Information)
@@ -503,7 +503,7 @@ class Ui_MainWindow(object):
         container_layout = QtWidgets.QGridLayout(container_widget)
         
         try:
-            with open(json_file, 'r') as file:
+            with open(info_path, 'r') as file:
                 data = json.load(file)
 
             row = 0

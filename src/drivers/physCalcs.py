@@ -8,14 +8,12 @@ from aeroCalcs import AeroCalcs
 
 
 class PhysCalcs:
-    def __init__(self, rocket_specs_file, parachute_size, material, motor_name):
+    def __init__(self, rocket_specs_file):
         with open(rocket_specs_file, "r") as file:
             self.rocket_specs = json.load(file)
 
-        self.aero_calcs = AeroCalcs(self.rocket_specs, parachute_size, material, motor_name)
-        self.motor = self.rocket_specs["motors"][motor_name]
-        self.parachute = self.rocket_specs["parachute"][parachute_size]
-        self.material = self.rocket_specs["materials"][material]
+        self.aero_calcs = AeroCalcs(self.rocket_specs)
+        self.motor = self.rocket_specs["motor"]
 
     def dynamics(self, t, y, burn_time, thrust):
         """Compute the dynamics (velocity and acceleration) of the rocket."""
@@ -167,10 +165,8 @@ class PhysCalcs:
 
 if __name__ == "__main__":
     # Create an instance
-    parachute_size = "small"
-    motor_name = "K"
     material = "blue_tube"
-    phys_calcs = PhysCalcs("../config/rocket_specs.json", parachute_size, material, motor_name)
+    phys_calcs = PhysCalcs("../config/rocket_specs.json")
 
     # Simulate the trajectory
     time, x, y, vx, vy = phys_calcs.simulate()

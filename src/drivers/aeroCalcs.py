@@ -1,20 +1,16 @@
 import numpy as np
 
 class AeroCalcs:
-    def __init__(self, rocket_specs, parachute_size, material, motor_name): # change later
+    def __init__(self, rocket_specs): # change later
         self.rocket_specs = rocket_specs
-        self.material = material.lower()
-        self.motor_name = motor_name
-
-        print(self.rocket_specs["materials"]["blue_tube"]["density"])
 
         # Load airframe, nose cone, fins, materials, and motor details
         self.airframe = self.rocket_specs["air_frame"]
         self.nose_cone = self.rocket_specs["nose_cone"]
         self.fins = self.rocket_specs["fins"]
-        self.motor = self.rocket_specs["motors"][self.motor_name]
-        self.parachute = self.rocket_specs["parachute"][parachute_size]
-        self.materials = self.rocket_specs["materials"][self.material]
+        self.motor = self.rocket_specs["motor"]
+        self.parachute = self.rocket_specs["parachute"]
+        self.materials = self.rocket_specs["materials"]
 
         # Material properties
         self.density = self.materials["density"] 
