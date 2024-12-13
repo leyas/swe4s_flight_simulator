@@ -1,21 +1,21 @@
 {
     "motor": {
-        "thrust": 200,
-        "burn_time": 3,
-        "mass": 300,
-        "length": 8,
-        "diameter": 2
+        "thrust": 800,
+        "burn_time": 3.5,
+        "mass": 500,
+        "length": 10,
+        "diameter": 3
     },
     "fins": {
         "form": 3,
-        "sweep_angle": 15.0,
-        "tip_chord": 2.0,
+        "sweep_angle": 20.0,
+        "tip_chord": 5.0,
         "semi_span": 5.0,
-        "root_chord": 5.5
+        "root_chord": 10.0
     },
     "air_frame": {
-        "diameter": 4.0,
-        "length": 21.0
+        "diameter": 2.0,
+        "length": 60.0
     },
     "nose_cone": {
         "shape": "elliptic",
@@ -26,9 +26,9 @@
         "altitude": 0
     },
     "parachute": {
-        "cd": 1.5,
-        "mass": 7,
-        "area": 72
+        "cd": 1.8,
+        "mass": 10,
+        "area": 120
     },
     "material": {
         "density": 1.8,
