@@ -1,21 +1,19 @@
 import numpy as np
 
 class AeroCalcs:
-    def __init__(self, rocket_specs, material="fiberglass", motor="K"): # change later
+    def __init__(self, rocket_specs): # change later
         self.rocket_specs = rocket_specs
-        self.material = material.lower()
-        self.motor_name = motor
 
         # Load airframe, nose cone, fins, materials, and motor details
         self.airframe = self.rocket_specs["air_frame"]
         self.nose_cone = self.rocket_specs["nose_cone"]
         self.fins = self.rocket_specs["fins"]
-        self.motor = self.rocket_specs["motors"][self.motor_name]
+        self.motor = self.rocket_specs["motor"]
         self.parachute = self.rocket_specs["parachute"]
         self.materials = self.rocket_specs["materials"]
 
         # Material properties
-        self.density = self.materials["fg_density"] if self.material == "fiberglass" else self.materials["bt_density"]
+        self.density = self.materials["density"] 
         self.thickness = self.materials["thickness"] / 10  # Convert mm to cm for calculations
 
     def calculate_air_density(self, altitude):
@@ -68,24 +66,6 @@ class AeroCalcs:
 
     def calculate_center_of_pressure(self):
         """Calculate the center of pressure (CP) in inches."""
-        # airframe_diameter = self.airframe["diameter"] * 2.54  # Inches to cm
-        # airframe_length = self.airframe["length"] * 2.54  # Inches to cm
-        # nose_cone_length = self.nose_cone["length"] * 2.54  # Inches to cm
-
-        # nose_cone_cp = airframe_length + nose_cone_length / 2
-        # nose_cone_force = 2 * (airframe_diameter ** 2) / nose_cone_length
-
-        # fin_area = 0.5 * self.fins["semi_span"] * (self.fins["root_chord"] + self.fins["tip_chord"]) * 2.54**2  # cm²
-
-        # fin_cp = (
-        #     self.fins["root_chord"] / 3 *
-        #     ((self.fins["root_chord"] + 2 * self.fins["tip_chord"]) / (self.fins["root_chord"] + self.fins["tip_chord"])) * 2.54  # cm
-        # )
-        # fin_cp += airframe_length - self.fins["root_chord"] * 2.54
-
-        # total_force = nose_cone_force + fin_area
-        # cp_cm = (nose_cone_force * nose_cone_cp + fin_area * fin_cp) / total_force
-        # return cp_cm / 2.54  # Convert CP to inches
 
         # Dimensions in inches
         nose_length = self.nose_cone["length"]
@@ -98,12 +78,13 @@ class AeroCalcs:
         fin_area = (root_chord + tip_chord) / 2 * semi_span
 
         # CP components
-        cp_nose = nose_length * 0.5
+        cp_nose = body_length + (nose_length * 0.5)
         cp_body = body_length * 0.5
-        cp_fins = (body_length + root_chord - tip_chord / 2) * fin_area
+        cp_fins = ((root_chord - tip_chord) / 2) * fin_area
 
         # Total CP
         cp_total = (cp_nose + cp_body + cp_fins) / (1 + fin_area)
+        
 
         return cp_total
 

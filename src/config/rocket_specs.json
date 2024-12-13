@@ -1,0 +1,36 @@
+{
+    "motor": {
+        "thrust": 500,
+        "burn_time": 10,
+        "mass": 500,
+        "length": 100,
+        "diameter": 38
+    },
+    "fins": {
+        "form": 3,
+        "sweep_angle": 20.0,
+        "tip_chord": 4.0,
+        "semi_span": 8.0,
+        "root_chord": 10.0
+    },
+    "air_frame": {
+        "diameter": 4.0,
+        "length": 80.0
+    },
+    "nose_cone": {
+        "shape": "conic",
+        "length": 8.0
+    },
+    "launch_conditions": {
+        "wind": 0,
+        "altitude": 0
+    },
+    "parachute": {
+        "cd": 1.8,
+        "mass": 127.6
+    },
+    "materials": {
+        "density": 1.8,
+        "thickness": 3
+    }
+}

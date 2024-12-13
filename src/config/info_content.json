@@ -1,0 +1,30 @@
+{
+    "infoTab": [
+      {
+        "group": "Fin Info",
+        "text": "Fins are critical components of a rocket's aerodynamic design, and their stability and performance are heavily influenced by specific dimensions such as root chord, tip chord, sweep angle, and semi-span. The root chord, the length of the fin's base where it attaches to the rocket body, determines the overall surface area and significantly impacts lift and drag. The tip chord, the length of the fin's outermost edge, influences the taper and aerodynamic efficiency of the fin. The sweep angle, defined by the inclination of the leading or trailing edge relative to the rocket body, affects the fin's ability to reduce drag and manage airflow separation at high speeds. Finally, the semi-span, the distance from the rocket body to the tip of the fin, dictates the fin's leverage in stabilizing the rocket, with a longer span providing greater control authority. Optimizing these dimensions ensures a balanced design that enhances aerodynamic stability while minimizing drag.",
+        "image": "fin.jpg"
+      },
+      {
+        "group": "Nose Cone Info",
+        "text": "Nose cone shapes significantly influence a rocket's aerodynamic performance, with designs such as tangent ogive, elliptic, and conic commonly used to balance drag reduction and manufacturing simplicity. The tangent ogive nose cone features a smooth, curved profile that minimizes drag at subsonic and supersonic speeds, making it ideal for high-speed rockets requiring efficient airflow. Elliptic nose cones, with their rounded, elliptical shape, offer excellent drag reduction at lower speeds and are particularly suitable for rockets operating in subsonic or transonic regimes. Conic nose cones, characterized by their straight, conical shape, are simpler to manufacture and provide acceptable aerodynamic performance, especially for rockets where cost or structural considerations take precedence. Each shape has its advantages, and selecting the optimal design depends on the rocket's intended speed, altitude, and mission requirements.",
+        "image": "noseCones.png"
+      },
+      {
+        "group": "Motor Info",
+        "text": "High-powered rocketry uses a classification system for motors based on total impulse, measured in Newton-seconds, to categorize their power and performance. The classes are designated alphabetically, starting with A for the smallest motors and increasing in power as the alphabet progresses. Motors used in high-powered rocketry typically begin at H-class, which marks the threshold of high-power certification, and extend to O-class and beyond for advanced applications. Each successive letter represents a doubling of the motor’s total impulse range. For example, an H motor delivers between 160 and 320 Newton-seconds of total impulse, while an I motor ranges from 320 to 640 Newton-seconds. Higher classes, such as J, K, and L, are commonly used for larger rockets capable of reaching higher altitudes or carrying heavier payloads. The selection of a motor class depends on factors like the rocket's weight, intended altitude, and flight profile, ensuring the motor provides sufficient thrust while adhering to safety and certification requirements.",
+        "image": "motors.png"
+      },
+      {
+        "group": "Static Margin Info",
+        "text": "Static margin is a critical parameter in rocket stability, representing the distance between the center of gravity (CG) and the center of pressure (CP), expressed as a fraction of the rocket's body diameter. A positive static margin ensures the rocket remains stable during flight, as the aerodynamic forces acting on the CP naturally align the rocket with its flight path. If the CP is too close to or ahead of the CG, the rocket becomes unstable and prone to uncontrolled movements or tumbling. While a larger static margin increases stability, it can also reduce maneuverability, leading to a trade-off between control and stability. For most rockets, a static margin of 1 to 2 body diameters is considered ideal, providing sufficient stability without excessively hindering performance. Properly calculating and adjusting the static margin through fin placement, weight distribution, or nose cone design is essential for achieving a predictable and controlled flight.",
+        "image": "static_margin.png"
+      },
+      {
+        "group": "Recovery Info",
+        "text": "Recovery systems are vital components of rockets, ensuring their safe descent and retrieval after flight. Parachutes are the most commonly used recovery devices, designed to slow the rocket’s descent by creating drag as it falls through the atmosphere. They come in various types, including flat, conical, and hemispherical, each offering different performance characteristics depending on the rocket’s size and descent speed requirements. Deployment mechanisms play a crucial role in recovery, often using pyrotechnic charges or electronic systems to eject the parachute at a specific altitude or flight event, such as apogee. Dual-deployment systems are frequently employed in high-powered rocketry, where a small drogue parachute is deployed at apogee to stabilize descent, followed by a larger main parachute deployed at a lower altitude to reduce landing velocity. Proper recovery design not only prevents damage to the rocket but also ensures compliance with safety regulations and facilitates reusability for future launches.",
+        "image": "recovery.jpg"
+      }
+    ]
+  }
+  
