@@ -25,7 +25,7 @@ Below is what you'd expect the GUI to look like after running rocketGUI.py
 ![Information Tab of GUI](gui_infotab.png)
 
 ## Required Modules
-- Python 3.12
+- Python 
 - NumPy
 - Matplotlib
 - SciPy
