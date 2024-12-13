@@ -69,7 +69,7 @@ Below is what you'd expect the GUI to look like after running rocketGUI.py
 
 4. Observe flight simulation and record results. 
 
-Please note, the GUI charastic values use whatever is in the json file. So, if you press display rocket without inputting any new values, it may show you an old rendering from pre-existing values. The same goes for plot z position. Additionally, if you create a fin that is mathmatically impossible, the code will override and show the closest possible result.
+Please note, the GUI characteristic values use whatever is in the json file. So, if you press display rocket without inputting any new values, it may show you an old rendering from pre-existing values. The same goes for plot z position. Additionally, if you create a fin that is mathmatically impossible, the code will override and show the closest possible result.
 
 For more information about rocket characteristics, please click the information tab in the top left corner. There, you can read about nose cone shapes, motor classes, rocket stability, and more!
 
