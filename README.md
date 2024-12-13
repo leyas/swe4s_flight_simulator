@@ -29,7 +29,7 @@ The GUI interacts with two primary calculation modules:
     ```bash
     cd swe4s_flight_simulator/config
 
-3. Set up the environment using the provided `environment.yml` file:
+3. Set up the environment using the provided `env.yml` file:
     If you're using **conda**, you can create a virtual environment with the required dependencies by running:
     ```bash
     conda env create -f env.yml
@@ -52,11 +52,17 @@ The GUI interacts with two primary calculation modules:
 
 4. Observe flight simulation and record results. 
 
+Please note, the GUI charastic values use whatever is in the json file. So, if you press display rocket without inputting any new values, it may show you an old rendering from pre-existing values. The same goes for plot z position.
+
+For more information about rocket characteristics, please click the information tab in the top left corner. There, you can read about nose cone shapes, motor classes, rocket stability, and more!
+
 ## Example Output
 
-## Requirements
-- Python 3.12
+## Required Modules
+- Python 
 - NumPy
 - Matplotlib
 - SciPy
-
+- PyQt5
+- json
+- os
