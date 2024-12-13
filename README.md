@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project simulates the flight trajectory of a rocket using both **aerodynamic** and **physical** calculations based on user-defined parameters. The goal is to compute and visualize the rocket's 1-dimensional flight path (position and velocity) from launch to landing. The simulation accounts for various factors such as airframe dimensions, motor thrust, drag, gravity, and more.
+This project simulates the flight trajectory of a rocket using both **aerodynamic** and **physical** calculations based on user-defined parameters. The goal is to compute and visualize the rocket's flight path (position and velocity) from launch to landing. The simulation accounts for various factors such as airframe dimensions, motor thrust, drag, gravity, and more.
 
 The project interacts with the user through our GUI:
 - **rocketGUI**: prompts user to input rocket characteristics such as its geometry, motor class, material, and parachute diameter. The flight simulation visual will be returned to the user in this same window after the rocket parameters are used to calculate its flight path.
@@ -27,9 +27,20 @@ The GUI interacts with two primary calculation modules:
 2. Install the required Python dependencies: Navigate to the project directory and install the necessary dependencies by running:
 
     ```bash
-    pip install numpy matplotlib scipy
+    cd swe4s_flight_simulator
 
-3. Ensure you have the necessary files: list the contents of your remote repository and ensure the list matches those present here on the webpage 
+3. Set up the environment using the provided `environment.yml` file:
+    If you're using **conda**, you can create a virtual environment with the required dependencies by running:
+    ```bash
+    conda env create -f environment.yml
+    ```
+
+4. Activate the environment:
+    ```bash
+    conda activate environment.yml
+    ```
+
+5. You are now ready to run the project!
 
 ## Usage
 
