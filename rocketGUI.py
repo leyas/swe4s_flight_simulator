@@ -379,45 +379,45 @@ class Ui_MainWindow(object):
     def update_motor(self, motor):
         if motor == "G":
             self.update_json("motor", "thrust", 500)
-            self.update_json("motor", "burn_time", 10)
-            self.update_json("motor", "mass", 500)
-            self.update_json("motor", "length", 100)
-            self.update_json("motor", "diameter", 38)
+            self.update_json("motor", "burn_time", 2.5)
+            self.update_json("motor", "mass", 100)
+            self.update_json("motor", "length", 4)
+            self.update_json("motor", "diameter", 1)
 
         elif motor == "H":
-            self.update_json("motor", "thrust", 500)
-            self.update_json("motor", "burn_time", 10)
-            self.update_json("motor", "mass", 500)
-            self.update_json("motor", "length", 100)
-            self.update_json("motor", "diameter", 38)
+            self.update_json("motor", "thrust", 1000)
+            self.update_json("motor", "burn_time", 2.75)
+            self.update_json("motor", "mass", 200)
+            self.update_json("motor", "length", 6)
+            self.update_json("motor", "diameter", 1.5)
         
         elif motor == "I":
-            self.update_json("motor", "thrust", 500)
-            self.update_json("motor", "burn_time", 10)
-            self.update_json("motor", "mass", 500)
-            self.update_json("motor", "length", 100)
-            self.update_json("motor", "diameter", 38)
+            self.update_json("motor", "thrust", 2000)
+            self.update_json("motor", "burn_time", 3)
+            self.update_json("motor", "mass", 300)
+            self.update_json("motor", "length", 8)
+            self.update_json("motor", "diameter", 2)
         
         elif motor == "J":
-            self.update_json("motor", "thrust", 500)
-            self.update_json("motor", "burn_time", 10)
-            self.update_json("motor", "mass", 500)
-            self.update_json("motor", "length", 100)
-            self.update_json("motor", "diameter", 38)
+            self.update_json("motor", "thrust", 4000)
+            self.update_json("motor", "burn_time", 3.25)
+            self.update_json("motor", "mass", 400)
+            self.update_json("motor", "length", 9)
+            self.update_json("motor", "diameter", 2.5)
         
         elif motor == "K":
-            self.update_json("motor", "thrust", 500)
-            self.update_json("motor", "burn_time", 10)
+            self.update_json("motor", "thrust", 8000)
+            self.update_json("motor", "burn_time", 3.5)
             self.update_json("motor", "mass", 500)
-            self.update_json("motor", "length", 100)
-            self.update_json("motor", "diameter", 38)
+            self.update_json("motor", "length", 10)
+            self.update_json("motor", "diameter", 3)
 
         else: # L
-            self.update_json("motor", "thrust", 500)
-            self.update_json("motor", "burn_time", 10)
-            self.update_json("motor", "mass", 500)
-            self.update_json("motor", "length", 100)
-            self.update_json("motor", "diameter", 38)
+            self.update_json("motor", "thrust", 16000)
+            self.update_json("motor", "burn_time", 3.75)
+            self.update_json("motor", "mass", 600)
+            self.update_json("motor", "length", 11)
+            self.update_json("motor", "diameter", 3.5)
 
 
     def display_rocket_design(self):
