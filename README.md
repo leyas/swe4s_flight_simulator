@@ -5,7 +5,7 @@
 This project simulates the flight trajectory of a rocket using both **aerodynamic** and **physical** calculations based on user-defined parameters. The goal is to compute and visualize the rocket's 1-dimensional flight path (position and velocity) from launch to landing. The simulation accounts for various factors such as airframe dimensions, motor thrust, drag, gravity, and more.
 
 The project interacts with the user through our GUI:
-- **rocketGUI**: prompts user to input rocket characteristics such as its geometry, motor class, material, and parachute diameter. 
+- **rocketGUI**: prompts user to input rocket characteristics such as its geometry, motor class, material, and parachute diameter. The flight simulation visual will be returned to the user in this same window after the rocket parameters are used to calculate its flight path.
 
 The GUI interacts with two primary calculation modules:
 - **AeroCalcs**: Performs aerodynamic calculations (e.g., air density, drag coefficient, center of gravity).
@@ -40,6 +40,8 @@ The GUI interacts with two primary calculation modules:
 3. Click "simulate flight path" when ready.
 
 4. Observe flight simulation and record results. 
+
+## Example Output
 
 ## Requirements
 - Python 3.12
