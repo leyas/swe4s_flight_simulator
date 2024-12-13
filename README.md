@@ -11,10 +11,10 @@ The project includes two primary calculation modules:
 ## Features
 
 - **Input Rocket Parameters**: Define rocket specifications in GUI.
-- **Aerodynamic Calculations**: Calculate drag, center of gravity (CG), and other aerodynamic properties.
-- **Flight Simulation**: Simulate the rocket's ascent and descent using numerical integration.
-- **Trajectory Plotting**: WIll provide a visual showing the rocket's flight path with position and velocity over time.
-- **Customizable Material and Motor**: Choose different mass, geometry, and motors for the rocket to see their effects on performance.
+- **Aerodynamic Calculations**: Calculate drag, center of gravity (CG), center of aerodynamic pressure (CP) and other aerodynamic properties.
+- **Flight Simulation**: Simulate the rocket's ascent and descent through equations of motion.
+- **Trajectory Plotting**: Provides a visual showing the rocket's flight path with position and velocity over time.
+- **Info Page**: Section in GUI with more information on rocket parameter definitions for beginners.
 
 ## Installation
 
@@ -39,8 +39,8 @@ The project includes two primary calculation modules:
 4. Observe flight simulation and record results. 
 
 ## Requirements
--Python 3.12
--NumPy
--Matplotlib
--SciPy
+- Python 3.12
+- NumPy
+- Matplotlib
+- SciPy
 
