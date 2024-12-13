@@ -421,7 +421,7 @@ class Ui_MainWindow(object):
         self.fins_group = QtWidgets.QGroupBox("Fins Customization")
         self.fins_group.setStyleSheet("QGroupBox { font-weight: bold; }")
         fin_font = self.fins_group.font()
-        nose_font.setPointSize(int(screen_height*0.006))
+        fin_font.setPointSize(int(screen_height*0.006))
         self.fins_group.setFont(fin_font)
         self.fins_layout = QtWidgets.QGridLayout(self.fins_group)
 
@@ -472,9 +472,14 @@ class Ui_MainWindow(object):
 
         # Body Material
         self.material_group = QtWidgets.QGroupBox("Material Customization")
+        self.material_group.setStyleSheet("QGroupBox { font-weight: bold; }")
+        material_font = self.material_group.font()
+        material_font.setPointSize(int(screen_height*0.006))
+        self.material_group.setFont(material_font)
         self.material_layout = QtWidgets.QGridLayout(self.material_group)
 
         self.material_label = QtWidgets.QLabel("Materials:")
+        self.material_label.setFont(label_font)
         self.material_list = QtWidgets.QListWidget()
         for item in ["Fiberglass", "Blue Tube"]:
             self.material_list.addItem(item)
@@ -487,9 +492,14 @@ class Ui_MainWindow(object):
 
         # Motors
         self.motor_group = QtWidgets.QGroupBox("Motor Selection")
+        self.motor_group.setStyleSheet("QGroupBox { font-weight: bold; }")
+        motor_font = self.motor_group.font()
+        motor_font.setPointSize(int(screen_height*0.006))
+        self.motor_group.setFont(motor_font)
         self.motor_layout = QtWidgets.QGridLayout(self.motor_group)
 
         self.motor_label = QtWidgets.QLabel("Available motors:")
+        self.motor_label.setFont(label_font)
         self.motor_list = QtWidgets.QListWidget()
         for item in ["G", "H", "I", "J", "K", "L"]:
             self.motor_list.addItem(item)
@@ -501,9 +511,14 @@ class Ui_MainWindow(object):
 
         # Parachute size
         self.parachute_group = QtWidgets.QGroupBox("Parachute Customization")
+        self.parachute_group.setStyleSheet("QGroupBox { font-weight: bold; }")
+        parachute_font = self.parachute_group.font()
+        parachute_font.setPointSize(int(screen_height*0.006))
+        self.parachute_group.setFont(parachute_font)
         self.parachute_layout = QtWidgets.QGridLayout(self.parachute_group)
 
         self.parachute_label = QtWidgets.QLabel("Materials:")
+        self.parachute_label.setFont(label_font)
         self.parachute_list = QtWidgets.QListWidget()
         for item in ["Small (15 inch)", "Medium (28 inch)", "Larger (42 inch)"]:
             self.parachute_list.addItem(item)
@@ -515,6 +530,10 @@ class Ui_MainWindow(object):
 
         ## Right Panel: Graph and Button for Rocket Design
         self.graph_group1 = QtWidgets.QGroupBox("Rocket Design")
+        self.graph_group1.setStyleSheet("QGroupBox { font-weight: bold; }")
+        graph_font = self.graph_group1.font()
+        graph_font.setPointSize(int(screen_height*0.006))
+        self.graph_group1.setFont(graph_font)
         self.graph_layout1 = QtWidgets.QVBoxLayout(self.graph_group1)
 
         # Matplotlib Figure
@@ -535,6 +554,8 @@ class Ui_MainWindow(object):
 
         # Right Panel: Graph and Button for Plot
         self.graph_group2 = QtWidgets.QGroupBox("Rocket Flight Path")
+        self.graph_group2.setStyleSheet("QGroupBox { font-weight: bold; }")
+        self.graph_group2.setFont(graph_font)
         self.graph_layout2 = QtWidgets.QVBoxLayout(self.graph_group2)
 
         # Matplotlib Figure
@@ -820,7 +841,7 @@ class Ui_MainWindow(object):
                         print(f"Image not found: {image_path}")  # Debugging log
 
                     # Add the group box to the layout
-                    container_layout.addWidget(group_box, row, 0)
+                    container_layout.addWidget(group_box, row, 2)
                     row += 1  # Move to the next row
 
         except Exception as e:
