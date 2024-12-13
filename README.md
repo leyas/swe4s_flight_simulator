@@ -24,15 +24,23 @@ The project includes two primary calculation modules:
 2. Install the required Python dependencies: Navigate to the project directory and install the necessary dependencies by running:
 
     ```bash
-    pip install -r requirements.txt
+    pip install numpy matplotlib scipy
 
 3. Ensure you have the necessary files: list the contents of your remote repository and ensure the list matches those present here on the webpage 
 
 ## Usage
 
+1. After installation, run the GUI file. You will be prompted to input characteristics of the rocket you plan on simulating.
+
+2. Correctly input values that characterize your rocket. 
+
+3. Click "simulate flight path" when ready.
+
+4. Observe flight simulation and record results. 
+
 ## Requirements
-Python 3.x
-NumPy
-Matplotlib
-SciPy
+-Python 3.12
+-NumPy
+-Matplotlib
+-SciPy
 
